@@ -8,7 +8,7 @@ namespace _tryconsole
 {
 	public class _constructclass
 	{
-		Object? _constructedclass = new Object();
+		Object? _constructedclass;
 		_classconfiguration _classconfiguration;
 		AssemblyName _assemblyname;
 		TypeBuilder? _typebuilder;
@@ -19,57 +19,14 @@ namespace _tryconsole
 		/// <param name="_classconfiguration">Configuration for class</param>
 		public _constructclass(_classconfiguration _classconfiguration)
 		{
+			this._constructedclass = new Object();
 			this._classconfiguration = _classconfiguration;
 			this._assemblyname = new AssemblyName(this._classconfiguration._classname);
+
+			this._construct();
 		}
 
-		public Object? _getconstructedclass()
-		{
-			return _constructedclass;
-		}
-
-		private void _defineclass()
-		{
-			AssemblyBuilder _assemblybuilder = AssemblyBuilder.DefineDynamicAssembly(this._assemblyname, AssemblyBuilderAccess.Run);
-			ModuleBuilder _modulebuilder = _assemblybuilder.DefineDynamicModule("_module");
-			this._typebuilder = _modulebuilder.DefineType(this._assemblyname.FullName, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout, null);
-			
-			this._defineconstructor();
-		}
-
-		private void _defineconstructor()
-		{
-			this._typebuilder?.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
-		}
-
-		private void _defineproperty(Type _propertytype, string _propertyname)
-		{
-			if (this._typebuilder != null)
-			{
-				FieldBuilder _fieldbuilder = this._typebuilder.DefineField("_" + _propertyname, _propertytype, FieldAttributes.Private);
-				PropertyBuilder _propertybuilder = this._typebuilder.DefineProperty(_propertyname, PropertyAttributes.HasDefault, _propertytype, null);
-				MethodBuilder _getpropertymethodbuilder = this._typebuilder.DefineMethod("get_" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, _propertytype, Type.EmptyTypes);
-				ILGenerator _getilgenerator = _getpropertymethodbuilder.GetILGenerator();
-				_getilgenerator.Emit(OpCodes.Ldarg_0);
-				_getilgenerator.Emit(OpCodes.Ldfld, _fieldbuilder);
-				_getilgenerator.Emit(OpCodes.Ret);
-				MethodBuilder _setpropertymethodbuilder = this._typebuilder.DefineMethod("set_" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null, new[]{_propertytype});
-				ILGenerator setIl = _setpropertymethodbuilder.GetILGenerator();
-				Label modifyProperty = setIl.DefineLabel();
-				Label exitSet = setIl.DefineLabel();
-				setIl.MarkLabel(modifyProperty);
-				setIl.Emit(OpCodes.Ldarg_0);
-				setIl.Emit(OpCodes.Ldarg_1);
-				setIl.Emit(OpCodes.Stfld, _fieldbuilder);
-				setIl.Emit(OpCodes.Nop);
-				setIl.MarkLabel(exitSet);
-				setIl.Emit(OpCodes.Ret);
-				_propertybuilder.SetGetMethod(_getpropertymethodbuilder);
-				_propertybuilder.SetSetMethod(_setpropertymethodbuilder);
-			}
-		}
-		
-		public void _config()
+		private void _construct()
 		{
 			// Check if configuration file not null
 			if (this._classconfiguration != null) 
@@ -97,15 +54,19 @@ namespace _tryconsole
 						// Prepare the class here
 						if (_isfieldcompliant)
 						{
+							// Define initial structure of class
 							this._defineclass();
+
 							if (this._typebuilder != null)
 							{
 								foreach (_propertyconfiguration _property in this._classconfiguration._properties)
 								{
+									// Define this property
 									this._defineproperty(this._gettype(_property._type), _property._name);
 								}
 								try
 								{
+									// Instantiate the type provided by TypeBuilder
 									_constructedclass = Activator.CreateInstance(this._typebuilder.CreateType());
 								}
 								catch(Exception _exception)
@@ -133,6 +94,53 @@ namespace _tryconsole
 			{
 				throw new Exception("returned null in class configuration file.");
 			}
+		}
+
+		private void _defineclass()
+		{
+			AssemblyBuilder _assemblybuilder = AssemblyBuilder.DefineDynamicAssembly(this._assemblyname, AssemblyBuilderAccess.Run);
+			ModuleBuilder _modulebuilder = _assemblybuilder.DefineDynamicModule("_module");
+			this._typebuilder = _modulebuilder.DefineType(this._assemblyname.FullName, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout, null);
+			
+			// Define class constructor
+			this._defineconstructor();
+		}
+
+		private void _defineconstructor()
+		{
+			this._typebuilder?.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
+		}
+
+		private void _defineproperty(Type _propertytype, string _propertyname)
+		{
+			if (this._typebuilder != null)
+			{
+				FieldBuilder _fieldbuilder = this._typebuilder.DefineField("_" + _propertyname, _propertytype, FieldAttributes.Private);
+				PropertyBuilder _propertybuilder = this._typebuilder.DefineProperty(_propertyname, PropertyAttributes.HasDefault, _propertytype, null);
+				MethodBuilder _getpropertymethodbuilder = this._typebuilder.DefineMethod("get_" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, _propertytype, Type.EmptyTypes);
+				ILGenerator _getilgenerator = _getpropertymethodbuilder.GetILGenerator();
+				_getilgenerator.Emit(OpCodes.Ldarg_0);
+				_getilgenerator.Emit(OpCodes.Ldfld, _fieldbuilder);
+				_getilgenerator.Emit(OpCodes.Ret);
+				MethodBuilder _setpropertymethodbuilder = this._typebuilder.DefineMethod("set_" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null, new[]{_propertytype});
+				ILGenerator _setilgenerator = _setpropertymethodbuilder.GetILGenerator();
+				Label _modifyproperty = _setilgenerator.DefineLabel();
+				Label _exitset = _setilgenerator.DefineLabel();
+				_setilgenerator.MarkLabel(_modifyproperty);
+				_setilgenerator.Emit(OpCodes.Ldarg_0);
+				_setilgenerator.Emit(OpCodes.Ldarg_1);
+				_setilgenerator.Emit(OpCodes.Stfld, _fieldbuilder);
+				_setilgenerator.Emit(OpCodes.Nop);
+				_setilgenerator.MarkLabel(_exitset);
+				_setilgenerator.Emit(OpCodes.Ret);
+				_propertybuilder.SetGetMethod(_getpropertymethodbuilder);
+				_propertybuilder.SetSetMethod(_setpropertymethodbuilder);
+			}
+		}
+		
+		public Object? _getconstructedclass()
+		{
+			return this._constructedclass;
 		}
 
 		public Type _gettype(string _typeinflatstring)

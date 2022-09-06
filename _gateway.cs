@@ -19,9 +19,10 @@ namespace _tryconsole
 			{
 				_classconfiguration _sampleclassconfig = _gateway._getasampleclassconfig();
 				_constructclass _constructclass = new _constructclass(_sampleclassconfig);
-				_constructclass._config();
-				if (_constructclass._getconstructedclass() != null) {
-					_gateway._models?.Add(_constructclass._getconstructedclass());
+				Object? _constructedclass = _constructclass._getconstructedclass();
+				
+				if (_constructedclass != null) {
+					_gateway._models?.Add(_constructedclass);
 				}
 				_gateway._outputclassbehaviourminimal();
 			}
