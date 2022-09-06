@@ -8,25 +8,24 @@ namespace _tryconsole
 {
 	public class _constructclass
 	{
-		Object? _constructedclassobject = new Object();
+		Object? _constructedclass = new Object();
 		_classconfiguration _classconfiguration;
 		AssemblyName _assemblyname;
 		TypeBuilder? _typebuilder;
 
-		/* public _constructclass(string _classname)
-		{
-			this._assemblyname = new AssemblyName(_classname);
-		} */
-
+		/// <summary>
+		/// Construct a class
+		/// </summary>
+		/// <param name="_classconfiguration">Configuration for class</param>
 		public _constructclass(_classconfiguration _classconfiguration)
 		{
 			this._classconfiguration = _classconfiguration;
 			this._assemblyname = new AssemblyName(this._classconfiguration._classname);
 		}
 
-		public Object? _getclass()
+		public Object? _getconstructedclass()
 		{
-			return _constructedclassobject;
+			return _constructedclass;
 		}
 
 		private void _defineclass()
@@ -70,22 +69,6 @@ namespace _tryconsole
 			}
 		}
 		
-		/* public object _config(Type[] _propertytypes, string[] _propertynames)
-		{
-			if (_propertytypes.Length != _propertynames.Length)
-			{
-				Console.WriteLine("The number of property names should match their corresopnding types number");
-			}
-
-			this._defineclass();
-			for (int ind = 0; ind < _propertynames.Count(); ind++)
-			{
-				_defineproperty(_propertytypes[ind], _propertynames[ind]);
-			}
-			Type type = this._typebuilder.CreateType();
-			return Activator.CreateInstance(type);
-		} */
-
 		public void _config()
 		{
 			// Check if configuration file not null
@@ -123,7 +106,7 @@ namespace _tryconsole
 								}
 								try
 								{
-									_constructedclassobject = Activator.CreateInstance(this._typebuilder.CreateType());
+									_constructedclass = Activator.CreateInstance(this._typebuilder.CreateType());
 								}
 								catch(Exception _exception)
 								{
@@ -152,10 +135,10 @@ namespace _tryconsole
 			}
 		}
 
-		public Type _gettype(string _typeinstring)
+		public Type _gettype(string _typeinflatstring)
 		{
 			Type _type = typeof(Nullable);
-			switch (_typeinstring)
+			switch (_typeinflatstring)
 			{
 				case "int":
 					_type = typeof(int);
@@ -176,8 +159,8 @@ namespace _tryconsole
 		/// <summary>
 		/// Configuration file for class
 		/// </summary>
-		/// <param name="_classname">Name of the class</param>
-		/// <param name="_properties">Properties of the class</param>
+		/// <param name="_classname">Name of class</param>
+		/// <param name="_properties">Properties of class</param>
 		public _classconfiguration(string _classname, List<_propertyconfiguration> _properties)
 		{
 			this._classname = _classname;
@@ -193,8 +176,8 @@ namespace _tryconsole
 		/// <summary>
 		/// Configuration file for a property for class
 		/// </summary>
-		/// <param name="_type"></param>
-		/// <param name="_name"></param>
+		/// <param name="_type">Property type in flat string</param>
+		/// <param name="_name">Name of property</param>
 		public _propertyconfiguration(string _type, string _name)
 		{
 			this._type = _type;

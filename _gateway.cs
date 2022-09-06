@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Reflection.Emit;
+﻿using System.Reflection;
 
 namespace _tryconsole
 {
-	public class _gateway
+    public class _gateway
 	{
 		List<Object>? _models = null;
 
@@ -22,9 +18,11 @@ namespace _tryconsole
 			try
 			{
 				_classconfiguration _sampleclassconfig = _gateway._getasampleclassconfig();
-				_constructclass _newclass = new _constructclass(_sampleclassconfig);
-				_newclass._config();
-				_gateway._models?.Add(_newclass._getclass());
+				_constructclass _constructclass = new _constructclass(_sampleclassconfig);
+				_constructclass._config();
+				if (_constructclass._getconstructedclass() != null) {
+					_gateway._models?.Add(_constructclass._getconstructedclass());
+				}
 				_gateway._outputclassbehaviourminimal();
 			}
 			catch(Exception _exception)
@@ -63,7 +61,7 @@ namespace _tryconsole
 						Type _class = _model.GetType();
 
 						Console.WriteLine(_class + " [class name] (");
-						foreach(PropertyInfo _property in _class.GetRuntimeProperties())
+						foreach(PropertyInfo _property in _class.GetProperties())
 						{
 							Console.WriteLine(_property.Name + " [property name] <-- " + _property?.ToString()?.Split(" ").FirstOrDefault() + " [property type]");
 						}
