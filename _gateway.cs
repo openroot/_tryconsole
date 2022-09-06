@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -7,18 +8,69 @@ namespace _tryconsole
 {
 	public class _gateway
 	{
+		List<Object>? _models = null;
+
+		public _gateway()
+		{
+			this._models = new List<Object>();
+		}
+
 		public static void Main(string[] args)
 		{
-			_constructclass _studentmodel = new _constructclass("_student");
-			var _studentclass = _studentmodel._config(new string[3]{"_id", "_name", "_address"}, new Type[3]{typeof(int), typeof(string), typeof(string)});
-			
-			Type _student = _studentclass.GetType();
-			foreach (PropertyInfo _property in _student.GetProperties())
-			{
-				Console.WriteLine("[[ type: " + _property.ToString() + "]] \t\t\t\t [[ name: " + _property.Name + "]]");
-			}
+			_gateway _gateway = new _gateway();
 
+			try
+			{
+				_classconfiguration _sampleclassconfig = _gateway._getasampleclassconfig();
+				_constructclass _newclass = new _constructclass(_sampleclassconfig);
+				_newclass._config();
+				_gateway._models?.Add(_newclass._getclass());
+				_gateway._outputclassbehaviourminimal();
+			}
+			catch(Exception _exception)
+			{
+				Console.WriteLine("EXCEPTION: " + _exception.Message);
+			}
+		}
+
+		public void _readclassconfigs()
+		{
 			//Console.ReadLine();
+		}
+
+		public _classconfiguration _getasampleclassconfig()
+		{
+			_classconfiguration _sampleclassconfig = new _classconfiguration(
+				"_student", 
+				new List<_propertyconfiguration>() {
+					new _propertyconfiguration("int", "_id"),
+					new _propertyconfiguration("string", "_name"),
+					new _propertyconfiguration("string", "_address")
+				}
+			);
+			return _sampleclassconfig;
+		}
+
+		public void _outputclassbehaviourminimal()
+		{
+			// output the models found in this._models
+			if(this._models != null)
+			{
+				foreach(Object _model in _models)
+				{
+					if (_model != null)
+					{
+						Type _class = _model.GetType();
+
+						Console.WriteLine(_class + " [class name] (");
+						foreach(PropertyInfo _property in _class.GetRuntimeProperties())
+						{
+							Console.WriteLine(_property.Name + " [property name] <-- " + _property?.ToString()?.Split(" ").FirstOrDefault() + " [property type]");
+						}
+						Console.WriteLine(")");
+					}
+				}
+			}
 		}
 	}
 }
