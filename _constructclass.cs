@@ -1,4 +1,3 @@
-
 using System;
 using System.Linq;
 using System.Reflection;
@@ -137,7 +136,7 @@ namespace _tryconsole
 				_propertybuilder.SetSetMethod(_setpropertymethodbuilder);
 			}
 		}
-		
+
 		public Object? _getconstructedclass()
 		{
 			return this._constructedclass;
