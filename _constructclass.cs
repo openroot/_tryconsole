@@ -56,22 +56,23 @@ namespace _tryconsole
 							// Define initial structure of class
 							this._defineclass();
 
-							if (this._typebuilder != null)
+							foreach (_propertyconfiguration _property in this._classconfiguration._properties)
 							{
-								foreach (_propertyconfiguration _property in this._classconfiguration._properties)
-								{
-									// Define this property
-									this._defineproperty(this._gettype(_property._type), _property._name);
-								}
-								try
+								// Define this property
+								this._defineproperty(this._gettype(_property._type), _property._name);
+							}
+							
+							try
+							{
+								if (this._typebuilder != null)
 								{
 									// Instantiate the type provided by TypeBuilder
 									_constructedclass = Activator.CreateInstance(this._typebuilder.CreateType());
 								}
-								catch(Exception _exception)
-								{
-									throw new Exception("Could not instantiate type provided by TypeBuilder", _exception);
-								}
+							}
+							catch(Exception _exception)
+							{
+								throw new Exception("Could not instantiate type provided by TypeBuilder", _exception);
 							}
 						}
 					}
