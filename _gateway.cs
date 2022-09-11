@@ -1,12 +1,14 @@
 ﻿using System.Reflection;
+//using System.Reflection.Emit;
 
 namespace _tryconsole
 {
     public class _gateway
 	{
-		List<Object> _instanceobjects = new List<Object>();
+		List<Object> _instanceobjects = new List<Object>() {};
+		//List<TypeBuilder> _modules = new List<TypeBuilder>() {};
 
-		public _gateway() { }
+		public _gateway() {}
 
 		public static void Main(string[] args)
 		{
@@ -27,6 +29,7 @@ namespace _tryconsole
 
 				_builddynamicmodule _dynamicmodule = new _builddynamicmodule(_samplemoduleconfiguration);
 				Object? _newinstanceobject = _dynamicmodule._haveaninstance();
+				//_dynamicmodule._gettypebuilder();
 				
 				if (_newinstanceobject != null) {
 					_gateway._instanceobjects.Add(_newinstanceobject);

@@ -170,8 +170,8 @@ namespace _tryconsole
 
 	public class _moduleconfiguration
 	{
-		public string _modulename = string.Empty;
-		public List<_propertyconfiguration> _properties = new List<_propertyconfiguration>();
+		public string _modulename { get; set; }
+		public List<_propertyconfiguration> _properties = new List<_propertyconfiguration>() {};
 
 		/// <summary>
 		/// Module configuration file
@@ -187,8 +187,8 @@ namespace _tryconsole
 
 	public class _propertyconfiguration
 	{
-		public string _type = string.Empty;
-		public string _name = string.Empty;
+		public string _type { get; set; }
+		public string _name { get; set; }
 
 		/// <summary>
 		/// Property configuration file
