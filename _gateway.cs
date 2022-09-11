@@ -133,10 +133,10 @@ namespace _tryconsole
 			_moduleconfiguration _samplemoduleconfiguration = new _moduleconfiguration(
 				"_student", 
 				new List<_propertyconfiguration>() {
-					new _propertyconfiguration("int", "_id"),
-					new _propertyconfiguration("string", "_fullname"),
-					new _propertyconfiguration("string", "_address"),
-					new _propertyconfiguration("bool", "_isdied")
+					new _propertyconfiguration(_propertyconfiguration._systemdefaulttype.Int32, "_id"),
+					new _propertyconfiguration(_propertyconfiguration._systemdefaulttype.String, "_fullname"),
+					new _propertyconfiguration(_propertyconfiguration._systemdefaulttype.String, "_address"),
+					new _propertyconfiguration(_propertyconfiguration._systemdefaulttype.Boolean, "_isdied")
 				}
 			);
 			return _samplemoduleconfiguration;
@@ -148,9 +148,9 @@ namespace _tryconsole
 			Console.WriteLine("int : " + typeof(int).Name);
 			Console.WriteLine("float : " + typeof(float).Name);
 			Console.WriteLine("double : " + typeof(double).Name);
-			Console.WriteLine("string : " + typeof(string).Name);
 			Console.WriteLine("char : " + typeof(char).Name);
 			Console.WriteLine("bool : " + typeof(bool).Name);
+			Console.WriteLine("string : " + typeof(string).Name);
 			Console.WriteLine("Int16 : " + typeof(Int16).Name);
 			Console.WriteLine("Int32 : " + typeof(Int32).Name);
 			Console.WriteLine("Int64 : " + typeof(Int64).Name);

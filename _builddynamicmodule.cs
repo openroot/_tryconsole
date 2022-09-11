@@ -11,8 +11,6 @@ namespace _tryconsole
 		AssemblyName _assemblyname { get; set; }
 		TypeBuilder? _typebuilder { get; set; }
 
-		//public const enum _predefinedpropertytypes;
-
 		/// <summary>
 		/// Build a dynamic module
 		/// </summary>
@@ -43,7 +41,7 @@ namespace _tryconsole
 						{
 							if (
 								String.IsNullOrEmpty(_property._name) || 
-								String.IsNullOrEmpty(_property._type)
+								String.IsNullOrEmpty(_property._type.ToString())
 							)
 							{
 								_ispropertiescompliant = false;
@@ -59,7 +57,8 @@ namespace _tryconsole
 							foreach (_propertyconfiguration _property in this._moduleconfiguration._properties)
 							{
 								// Define this property
-								this._definemoduleproperty(this._getpropertytypefromstring(_property._type), _property._name);
+								//this._definemoduleproperty(this._getpropertytypefromstring(_property._type), _property._name);
+								this._definemoduleproperty(_property._type, _property._name);
 							}
 						}
 					}
@@ -130,29 +129,6 @@ namespace _tryconsole
 		}
 
 		/// <summary>
-		/// Get strongly-typed Type from type in string format 
-		/// </summary>
-		/// <param name="_propertytypeinstringformat"></param>
-		/// <returns>Type</returns>
-		public Type _getpropertytypefromstring(string _propertytypeinstringformat)
-		{
-			Type _type = typeof(Nullable);
-			switch (_propertytypeinstringformat)
-			{
-				case "int":
-					_type = typeof(int);
-					break;
-				case "string":
-					_type = typeof(string);
-					break;
-				case "bool": case "Boolean":
-					_type = typeof(bool);
-					break;
-			}
-			return _type;
-		}
-
-		/// <summary>
 		/// Create a new instance of the dynamic module
 		/// </summary>
 		/// <returns>Object (nullable)</returns>
@@ -191,18 +167,40 @@ namespace _tryconsole
 
 	public class _propertyconfiguration
 	{
-		public string _type { get; set; }
+		public Type _type { get; set; }
 		public string _name { get; set; }
+		public enum _systemdefaulttype { Int16, Int32, Int64, UInt16, UInt32, UInt64, Single, Double, Char, Boolean, String };
 
 		/// <summary>
 		/// Property configuration file
 		/// </summary>
-		/// <param name="_type">Type of the property in string format</param>
+		/// <param name="_type">Type of the property</param>
 		/// <param name="_name">Property name</param>
-		public _propertyconfiguration(string _type, string _name)
+		public _propertyconfiguration(Type _type, string _name)
 		{
 			this._type = _type;
 			this._name = _name;
+		}
+
+		/// <summary>
+		/// Property configuration file
+		/// </summary>
+		/// <param name="_type">Type of the property system default</param>
+		/// <param name="_name">Property name</param>
+		public _propertyconfiguration(_systemdefaulttype _type, string _name)
+		{
+			this._type = this._getsystemtype(_type);
+			this._name = _name;
+		}
+
+		private Type _getsystemtype(_systemdefaulttype _systemdefaulttype)
+		{
+			Type _type = typeof(System.Nullable);
+
+			string _typeunformatted = "System." + _systemdefaulttype.ToString();
+			_type = Type.GetType(_typeunformatted) ?? _type;
+
+			return _type;
 		}
 	}
 
