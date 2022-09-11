@@ -64,20 +64,6 @@ namespace _tryconsole
 			}
 		}
 
-		public _moduleconfiguration _getsamplemoduleconfiguration()
-		{
-			_moduleconfiguration _samplemoduleconfiguration = new _moduleconfiguration(
-				"_student", 
-				new List<_propertyconfiguration>() {
-					new _propertyconfiguration("int", "_id"),
-					new _propertyconfiguration("string", "_fullname"),
-					new _propertyconfiguration("string", "_address"),
-					new _propertyconfiguration("bool", "_isdied")
-				}
-			);
-			return _samplemoduleconfiguration;
-		}
-
 		private void _outputmodulebehaviourminimal()
 		{
 			// output the modules found in _modulescontainer
@@ -140,6 +126,20 @@ namespace _tryconsole
 				_studentaddress?.SetValue(_instanceobject, "Sector 52, Gurgaon", null);
 				Console.WriteLine( _studentaddress?.GetValue(_instanceobject, null)?.ToString()); */
 			}
+		}
+
+		public _moduleconfiguration _getsamplemoduleconfiguration()
+		{
+			_moduleconfiguration _samplemoduleconfiguration = new _moduleconfiguration(
+				"_student", 
+				new List<_propertyconfiguration>() {
+					new _propertyconfiguration("int", "_id"),
+					new _propertyconfiguration("string", "_fullname"),
+					new _propertyconfiguration("string", "_address"),
+					new _propertyconfiguration("bool", "_isdied")
+				}
+			);
+			return _samplemoduleconfiguration;
 		}
 
 		public void _miscfunction()
