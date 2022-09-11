@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -127,6 +129,11 @@ namespace _tryconsole
 			this._typebuilder?.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
 		}
 
+		/// <summary>
+		/// Get strongly-typed Type from type in string format 
+		/// </summary>
+		/// <param name="_propertytypeinstringformat"></param>
+		/// <returns>Type</returns>
 		public Type _getpropertytypefromstring(string _propertytypeinstringformat)
 		{
 			Type _type = typeof(Nullable);
@@ -145,24 +152,23 @@ namespace _tryconsole
 			return _type;
 		}
 
-		public TypeBuilder? _gettypebuilder()
-		{
-			return this._typebuilder;
-		}
-
+		/// <summary>
+		/// Create a new instance of the dynamic module
+		/// </summary>
+		/// <returns>Object (nullable)</returns>
 		public Object? _haveaninstance()
 		{
-			Object? _instance = null;
+			Object? _instanceobject = null;
 			try
 			{
 				// Create an instance of the TypeBuilder
-				_instance = Activator.CreateInstance(this._typebuilder?.CreateType());
+				_instanceobject = Activator.CreateInstance(this._typebuilder?.CreateType());
 			}
-			catch(Exception _exception)
+			catch (Exception _exception)
 			{
 				throw new Exception("Could not instantiate TypeBuilder", _exception);
 			}
-			return _instance;
+			return _instanceobject;
 		}
 	}
 

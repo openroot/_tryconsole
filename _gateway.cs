@@ -1,12 +1,12 @@
-﻿using System.Reflection;
-//using System.Reflection.Emit;
+﻿using System;
+using System.Collections.Generic;
+using System.Reflection;
 
 namespace _tryconsole
 {
     public class _gateway
 	{
-		List<Object> _instanceobjects = new List<Object>() {};
-		//List<TypeBuilder> _modules = new List<TypeBuilder>() {};
+		Dictionary<Guid, List<Object>> _modulescontainer = new Dictionary<Guid, List<Object>>() {};
 
 		public _gateway() {}
 
@@ -15,6 +15,7 @@ namespace _tryconsole
 			_gateway _gateway = new _gateway();
 
 			_gateway._createmodules();
+			_gateway._outputmodulebehaviourminimal();
 
 			_gateway._miscfunction();
 		}
@@ -23,23 +24,43 @@ namespace _tryconsole
 		{
 			try
 			{
-				_gateway _gateway = this;
-
-				_moduleconfiguration _samplemoduleconfiguration = _gateway._getsamplemoduleconfiguration();
-
-				_builddynamicmodule _dynamicmodule = new _builddynamicmodule(_samplemoduleconfiguration);
-				Object? _newinstanceobject = _dynamicmodule._haveaninstance();
-				//_dynamicmodule._gettypebuilder();
+				// TODO:
+				_moduleconfiguration _samplemoduleconfiguration = this._getsamplemoduleconfiguration();
+				_builddynamicmodule _dynamicmodule1 = new _builddynamicmodule(_samplemoduleconfiguration);
 				
-				if (_newinstanceobject != null) {
-					_gateway._instanceobjects.Add(_newinstanceobject);
-				}
+				Object? _newinstanceobject1 = _dynamicmodule1._haveaninstance();
+				this._addinstanceobjecttomodulescontainer(_newinstanceobject1);
 
-				_gateway._outputmodulebehaviourminimal();
+				// TODO:
+				_samplemoduleconfiguration._modulename = "_student_another";
+				_builddynamicmodule _dynamicmodule2 = new _builddynamicmodule(_samplemoduleconfiguration);
+				
+				Object? _newinstanceobject2 = _dynamicmodule2._haveaninstance();
+				this._addinstanceobjecttomodulescontainer(_newinstanceobject2);
+				Object? _newinstanceobject3 = _dynamicmodule2._haveaninstance();
+				this._addinstanceobjecttomodulescontainer(_newinstanceobject3);
 			}
-			catch(Exception _exception)
+			catch (Exception _exception)
 			{
 				Console.WriteLine("EXCEPTION: " + _exception.Message);
+			}
+		}
+
+		private void _addinstanceobjecttomodulescontainer(Object? _instanceobject)
+		{
+			if (this._modulescontainer != null && _instanceobject != null)
+			{
+				Object _newinstanceobject = _instanceobject ?? new Object();
+
+				Guid _moduleguid = _newinstanceobject.GetType().GUID;
+				if (!_modulescontainer.ContainsKey(_moduleguid))
+				{
+					_modulescontainer.Add(_moduleguid, new List<Object>());
+				}
+				if (_modulescontainer.ContainsKey(_moduleguid))
+				{
+					_modulescontainer[_moduleguid].Add(_newinstanceobject);
+				}
 			}
 		}
 
@@ -59,31 +80,37 @@ namespace _tryconsole
 
 		private void _outputmodulebehaviourminimal()
 		{
-			// output the models found in this._models
-			if(this._instanceobjects != null)
+			// output the modules found in _modulescontainer
+			if (this._modulescontainer != null)
 			{
+				string _message = string.Empty;
+
 				int _modulecount = 0;
-				foreach(Object _instanceobject in this._instanceobjects)
+				foreach (KeyValuePair<Guid, List<Object>> _modulecontainer in _modulescontainer)
 				{
-					if (_instanceobject != null)
+					var _module = _modulecontainer.Value[0].GetType();
+
+					_message += "[ module " + ++_modulecount + ". ] ";
+					_message += _module.Name + " ;name | " + _module.ToString() + " ;type | " + _modulecontainer.Key + " ;GUID {\n";
+
+					foreach (Object _instanceobject in _modulecontainer.Value)
 					{
 						Type _instance = _instanceobject.GetType();
 
-						string _message = String.Empty + "[ module " + ++_modulecount + ". ] ";
-						_message += _instance.Name + " ;name || " + _instance.ToString() + " ;type {\n";
+						_message += "\tan instance " + "\n"; // TODO: add instance GUID here
 
 						int _propertycount = 0;
-						foreach(PropertyInfo _property in _instance.GetProperties())
+						foreach (PropertyInfo _property in _instance.GetProperties())
 						{
 							_message += "\t[ property " + ++_propertycount + ". ] ";
 							_message += _property.Name + " ;name || " + _property?.ToString()?.Split(" ").FirstOrDefault() + " ;type\n";
 						}
-
-						_message += "}\n";
-
-						Console.Write(_message);
 					}
+
+					_message += "}\n";
 				}
+
+				Console.WriteLine(_message);
 			}
 		}
 
