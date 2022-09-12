@@ -133,10 +133,10 @@ namespace _tryconsole
 			_moduleconfiguration _samplemoduleconfiguration = new _moduleconfiguration(
 				"_student", 
 				new List<_propertyconfiguration>() {
-					new _propertyconfiguration(_propertyconfiguration._systemdefaulttype.Int32, "_id"),
-					new _propertyconfiguration(_propertyconfiguration._systemdefaulttype.String, "_fullname"),
-					new _propertyconfiguration(_propertyconfiguration._systemdefaulttype.String, "_address"),
-					new _propertyconfiguration(_propertyconfiguration._systemdefaulttype.Boolean, "_isdied")
+					new _propertyconfiguration("Int32", "_id"),
+					new _propertyconfiguration("String", "_fullname"),
+					new _propertyconfiguration("String", "_address"),
+					new _propertyconfiguration("Boolean", "_isdied")
 				}
 			);
 			return _samplemoduleconfiguration;

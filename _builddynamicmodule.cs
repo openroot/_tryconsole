@@ -193,6 +193,17 @@ namespace _tryconsole
 			this._name = _name;
 		}
 
+		/// <summary>
+		/// Property configuration file
+		/// </summary>
+		/// <param name="_type">Type of the property system default in plain string</param>
+		/// <param name="_name">Property name</param>
+		public _propertyconfiguration(string _type, string _name)
+		{
+			this._type = this._getsystemtypebystring(_type);
+			this._name = _name;
+		}
+
 		private Type _getsystemtype(_systemdefaulttype _systemdefaulttype)
 		{
 			Type _type = typeof(System.Nullable);
@@ -202,6 +213,17 @@ namespace _tryconsole
 
 			return _type;
 		}
+
+		private Type _getsystemtypebystring(string _systemdefaulttype)
+		{
+			Type _type = typeof(System.Nullable);
+
+			string _typeunformatted = "System." + _systemdefaulttype.ToString();
+			_type = Type.GetType(_typeunformatted) ?? _type;
+
+			return _type;
+		}
+
 	}
 
 }
