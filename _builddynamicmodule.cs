@@ -8,8 +8,7 @@ namespace _tryconsole
 	public class _builddynamicmodule
 	{
 		_moduleconfiguration _moduleconfiguration { get; set; }
-		AssemblyName _assemblyname { get; set; }
-		TypeBuilder? _typebuilder { get; set; }
+		TypeBuilder? _type { get; set; }
 
 		/// <summary>
 		/// Build a dynamic module
@@ -18,7 +17,6 @@ namespace _tryconsole
 		public _builddynamicmodule(_moduleconfiguration _moduleconfiguration)
 		{
 			this._moduleconfiguration = _moduleconfiguration;
-			this._assemblyname = new AssemblyName(this._moduleconfiguration._modulename);
 			
 			this._preparestructure();
 		}
@@ -54,6 +52,9 @@ namespace _tryconsole
 							// Define initial structure of module
 							this._definemodule();
 
+							// Define module constructor
+							this._definemoduleconstructor();
+
 							foreach (_propertyconfiguration _property in this._moduleconfiguration._properties)
 							{
 								// Define this property
@@ -84,48 +85,48 @@ namespace _tryconsole
 
 		private void _definemodule()
 		{
-			AssemblyBuilder _assemblybuilder = AssemblyBuilder.DefineDynamicAssembly(this._assemblyname, AssemblyBuilderAccess.Run);
-			ModuleBuilder _module = _assemblybuilder.DefineDynamicModule("_module_" + this._moduleconfiguration._modulename);
-			this._typebuilder = _module.DefineType(this._assemblyname.FullName, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout, null);
+			AssemblyName _assemblyname = new AssemblyName(this._moduleconfiguration._modulename);
+			AssemblyBuilder _assembly = AssemblyBuilder.DefineDynamicAssembly(_assemblyname, AssemblyBuilderAccess.Run);
 			
-			// Define module constructor
-			this._definemoduleconstructor();
+			ModuleBuilder _module = _assembly.DefineDynamicModule("_module_" + this._moduleconfiguration._modulename);
+			this._type = _module.DefineType(_assemblyname.FullName, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout, null);
 		}
 
 		private void _definemoduleproperty(Type _propertytype, string _propertyname)
 		{
-			if (this._typebuilder != null)
+			if (this._type != null)
 			{
-				FieldBuilder _field = this._typebuilder.DefineField(_propertyname, _propertytype, FieldAttributes.Private);
+				// basic field
+				FieldBuilder _field = this._type.DefineField("_field_" + _propertyname, _propertytype, FieldAttributes.Private);
 				
-				PropertyBuilder _property = this._typebuilder.DefineProperty(_propertyname, PropertyAttributes.HasDefault, _propertytype, null);
+				MethodBuilder _get_method = this._type.DefineMethod("_get_" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, _propertytype, Type.EmptyTypes);
+				ILGenerator _get_immediatelanguage = _get_method.GetILGenerator();
+				_get_immediatelanguage.Emit(OpCodes.Ldarg_0);
+				_get_immediatelanguage.Emit(OpCodes.Ldfld, _field);
+				_get_immediatelanguage.Emit(OpCodes.Ret);
 				
-				MethodBuilder _getpropertymethodbuilder = this._typebuilder.DefineMethod("_get_" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, _propertytype, Type.EmptyTypes);
-				ILGenerator _getilgenerator = _getpropertymethodbuilder.GetILGenerator();
-				_getilgenerator.Emit(OpCodes.Ldarg_0);
-				_getilgenerator.Emit(OpCodes.Ldfld, _field);
-				_getilgenerator.Emit(OpCodes.Ret);
-				
-				MethodBuilder _setpropertymethodbuilder = this._typebuilder.DefineMethod("_set_" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null, new[]{_propertytype});
-				ILGenerator _setilgenerator = _setpropertymethodbuilder.GetILGenerator();
-				Label _modifyproperty = _setilgenerator.DefineLabel();
-				Label _exitset = _setilgenerator.DefineLabel();
-				_setilgenerator.MarkLabel(_modifyproperty);
-				_setilgenerator.Emit(OpCodes.Ldarg_0);
-				_setilgenerator.Emit(OpCodes.Ldarg_1);
-				_setilgenerator.Emit(OpCodes.Stfld, _field);
-				_setilgenerator.Emit(OpCodes.Nop);
-				_setilgenerator.MarkLabel(_exitset);
-				_setilgenerator.Emit(OpCodes.Ret);
+				MethodBuilder _set_method = this._type.DefineMethod("_set_" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null, new[]{_propertytype});
+				ILGenerator _set_immediatelanguage = _set_method.GetILGenerator();
+				Label _modifyproperty = _set_immediatelanguage.DefineLabel();
+				Label _exitset = _set_immediatelanguage.DefineLabel();
+				_set_immediatelanguage.MarkLabel(_modifyproperty);
+				_set_immediatelanguage.Emit(OpCodes.Ldarg_0);
+				_set_immediatelanguage.Emit(OpCodes.Ldarg_1);
+				_set_immediatelanguage.Emit(OpCodes.Stfld, _field);
+				_set_immediatelanguage.Emit(OpCodes.Nop);
+				_set_immediatelanguage.MarkLabel(_exitset);
+				_set_immediatelanguage.Emit(OpCodes.Ret);
 
-				_property.SetGetMethod(_getpropertymethodbuilder);
-				_property.SetSetMethod(_setpropertymethodbuilder);
+				// { get; set; } method for property on thy same field
+				PropertyBuilder _property = this._type.DefineProperty(_propertyname, PropertyAttributes.HasDefault, _propertytype, null);
+				_property.SetGetMethod(_get_method);
+				_property.SetSetMethod(_set_method);
 			}
 		}
 
 		private void _definemoduleconstructor()
 		{
-			this._typebuilder?.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
+			this._type?.DefineDefaultConstructor(MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.RTSpecialName);
 		}
 
 		/// <summary>
@@ -138,7 +139,10 @@ namespace _tryconsole
 			try
 			{
 				// Create an instance of the TypeBuilder
-				_instanceobject = Activator.CreateInstance(this._typebuilder?.CreateType());
+				Type _type = this._type?.CreateType() ?? typeof(Nullable);
+				if (_type != typeof(Nullable)) {
+					_instanceobject = Activator.CreateInstance(_type);
+				}
 			}
 			catch (Exception _exception)
 			{

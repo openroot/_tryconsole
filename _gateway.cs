@@ -22,6 +22,13 @@ namespace _tryconsole
 
 		public void _createmodules()
 		{
+			/* Console.Write("Create (a)sample module (b)manual ,press corresponding bullet symbol: ");
+			var _action = Console.ReadLine();
+			switch (_action)
+			{
+
+			} */
+			
 			try
 			{
 				// TODO:
