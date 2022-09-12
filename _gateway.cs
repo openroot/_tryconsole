@@ -114,10 +114,65 @@ namespace _tryconsole
 			Console.ReadLine(); */
 		}
 
+		private void _takeinputoutputformodule()
+		{
+			// traverse the modules found in _modulescontainer
+			if (this._modulescontainer != null)
+			{
+				string _message = string.Empty;
+
+				int _modulecount = 0;
+				foreach (KeyValuePair<Guid, List<Object>> _modulecontainer in _modulescontainer)
+				{
+					var _module = _modulecontainer.Value[0].GetType();
+
+					_message += "[ module " + ++_modulecount + ". ] ";
+					_message += _module.Name + " ;name | " + _module.ToString() + " ;type | " + _modulecontainer.Key + " ;GUID {\n";
+
+					foreach (Object _instanceobject in _modulecontainer.Value)
+					{
+						Type _instance = _instanceobject.GetType();
+
+						_message += "\tan instance " + "\n"; // TODO: add instance GUID here
+
+						this._inputintoamoduleproperties(_instanceobject);
+
+						int _propertycount = 0;
+						foreach (PropertyInfo _property in _instance.GetProperties())
+						{
+							_message += "\t[ property " + ++_propertycount + ". ] ";
+							_message += _property.Name + " ;name || " + _property?.ToString()?.Split(" ").FirstOrDefault() + " ;type\n";
+						}
+					}
+
+					_message += "}\n";
+				}
+
+				Console.WriteLine(_message);
+			}
+		}
+
 		private void _inputintoamoduleproperties(Object _instanceobject)
 		{
 			// TODO:
-			/*  */
+			if (_instanceobject != null)
+			{
+				Type _instance = _instanceobject.GetType();
+
+				Console.WriteLine("Enter values for each property: ");
+
+				int _propertycount = 0;
+				foreach (PropertyInfo _property in _instance?.GetProperties())
+				{
+					string _message = String.Empty;
+
+					_message += "\t[ property " + ++_propertycount + ". ] ";
+					_message +=  + _property.Name + " (" + _property?.ToString()?.Split(" ").FirstOrDefault() + "): ";
+				
+					this._setpropertyvalue(_property, _instanceobject, "Sector 52, Gurgaon");
+					this._getpropertyvalue(_property, _instanceobject);
+				}
+			}
 		}
 
 		private void _outputamoduleproperties(Object _instanceobject)
@@ -133,6 +188,17 @@ namespace _tryconsole
 				_studentaddress?.SetValue(_instanceobject, "Sector 52, Gurgaon", null);
 				Console.WriteLine( _studentaddress?.GetValue(_instanceobject, null)?.ToString()); */
 			}
+		}
+
+		private void _setpropertyvalue(PropertyInfo _property, Object _instanceobject, Object _value)
+		{
+			_property.SetValue(_instanceobject, _value, null);
+		}
+
+		private void _getpropertyvalue(PropertyInfo _property, Object _instanceobject)
+		{
+			_property.SetValue(_instanceobject, _value, null);
+			Console.WriteLine(_property.GetValue(_instanceobject, null)?.ToString());
 		}
 
 		public _moduleconfiguration _getsamplemoduleconfiguration()
