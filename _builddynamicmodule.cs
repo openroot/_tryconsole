@@ -58,7 +58,6 @@ namespace _tryconsole
 							foreach (_propertyconfiguration _property in this._moduleconfiguration._properties)
 							{
 								// Define this property
-								//this._definemoduleproperty(this._getpropertytypefromstring(_property._type), _property._name);
 								this._definemoduleproperty(_property._type, _property._name);
 							}
 						}

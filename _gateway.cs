@@ -15,7 +15,7 @@ namespace _tryconsole
 			_gateway _gateway = new _gateway();
 
 			_gateway._createmodules();
-			_gateway._outputmodulebehaviourminimal();
+			_gateway._traversemodules();
 
 			_gateway._miscfunction();
 		}
@@ -25,9 +25,7 @@ namespace _tryconsole
 			/* Console.Write("Create (a)sample module (b)manual ,press corresponding bullet symbol: ");
 			var _action = Console.ReadLine();
 			switch (_action)
-			{
-
-			} */
+			{ } */
 			
 			try
 			{
@@ -71,39 +69,126 @@ namespace _tryconsole
 			}
 		}
 
-		private void _outputmodulebehaviourminimal()
+		private void _traversemodules()
 		{
-			// output the modules found in _modulescontainer
+			// traverse the module container
 			if (this._modulescontainer != null)
 			{
-				string _message = string.Empty;
+				char _instanceoperation = 'b'; // TODO: take operation choice from user
 
-				int _modulecount = 0;
+				int _modulecount = 0; // module counter
+
+				// loop through modules (if any) found in module container
 				foreach (KeyValuePair<Guid, List<Object>> _modulecontainer in _modulescontainer)
 				{
-					var _module = _modulecontainer.Value[0].GetType();
+					string _message = string.Empty;
 
-					_message += "[ module " + ++_modulecount + ". ] ";
-					_message += _module.Name + " ;name | " + _module.ToString() + " ;type | " + _modulecontainer.Key + " ;GUID {\n";
+					// module type
+					Type? _module = _modulecontainer.Value[0].GetType();
 
+					// output module order number
+					_message += "[module " + ++_modulecount + ".] ";
+					// output module description
+					_message += _module.Name + " (name) | " + _module.ToString() + " (type)" + Environment.NewLine + _modulecontainer.Key + " (GUID)" + Environment.NewLine + "{";
+					Console.WriteLine(_message);
+
+					int _instancecount = 0; // module counter
+
+					// loop through each instances for the module (if any)
 					foreach (Object _instanceobject in _modulecontainer.Value)
 					{
-						Type _instance = _instanceobject.GetType();
-
-						_message += "\tan instance " + "\n"; // TODO: add instance GUID here
-
-						int _propertycount = 0;
-						foreach (PropertyInfo _property in _instance.GetProperties())
-						{
-							_message += "\t[ property " + ++_propertycount + ". ] ";
-							_message += _property.Name + " ;name || " + _property?.ToString()?.Split(" ").FirstOrDefault() + " ;type\n";
-						}
+						// output instance description
+						_message = "\t[instance " + ++_instancecount + ".] " + _instanceobject.GetType().Name + " (name)"; // TODO: add instance GUID here
+						Console.WriteLine(_message);
+				
+						// pass the instance object to action propagator
+						this._instanceactions(_instanceobject, _instanceoperation);
 					}
 
-					_message += "}\n";
+					_message = "}";
+					Console.WriteLine(_message);
 				}
 
+			}
+		}
+
+		private void _instanceactions(Object _instanceobject, char _instanceoperation)
+		{
+			if (_instanceobject != null)
+			{
+				Type _instance = _instanceobject.GetType();
+
+				string _message = String.Empty;
+
+				switch (_instanceoperation)
+				{
+					case 'b':
+						_message += "\tNominal behaviour:";
+						break;
+					case 'i':
+						_message += "\tEnter values for each property: ";
+						break;
+					case 'o':
+						_message += "\tValues for each properties are: ";
+						break;
+				}
+				
 				Console.WriteLine(_message);
+
+				int _propertycount = 0; // property counter
+
+				// loop through each property of instance (if any)
+				foreach (PropertyInfo _property in _instance.GetProperties())
+				{
+					_message = String.Empty;
+
+					// output property order number
+					_message += "\t\t[property " + ++_propertycount + ".] ";
+					// output property description
+					_message +=  _property.Name + " (" + _property?.ToString()?.Split(" ").FirstOrDefault() + ") ";
+					Console.WriteLine(_message);
+
+					switch (_instanceoperation)
+					{
+						case 'b':
+							this._outputpropertyminimalbehaviour(_instanceobject);
+							break;
+						case 'i':
+							this._setpropertyvalue(_property, _instanceobject, "Sector 52, Gurgaon");
+							break;
+						case 'o':
+							this._getpropertyvalue(_property, _instanceobject);
+							break;
+					}
+				}
+			}
+		}
+
+		private void _outputpropertyminimalbehaviour(Object _instanceobject)
+		{
+			Type _instance = _instanceobject.GetType();
+
+			string _message = String.Empty;
+
+			int _propertycount = 0;
+			foreach (PropertyInfo _property in _instance.GetProperties())
+			{
+				_message += "\t[ property " + ++_propertycount + ". ] ";
+				_message += _property.Name + " ;name || " + _property?.ToString()?.Split(" ").FirstOrDefault() + " ;type\n";
+			}
+		}
+
+		private void _setpropertyvalue(PropertyInfo? _property, Object _instanceobject, Object _value)
+		{
+			if (_property != null) {
+				_property.SetValue(_instanceobject, _value, null);
+			}
+		}
+
+		private void _getpropertyvalue(PropertyInfo? _property, Object _instanceobject)
+		{
+			if (_property != null) {
+				Console.WriteLine(_property.GetValue(_instanceobject, null)?.ToString());
 			}
 		}
 
@@ -112,93 +197,6 @@ namespace _tryconsole
 			// TODO:
 			/* Console.WriteLine("Enter a string: ");
 			Console.ReadLine(); */
-		}
-
-		private void _takeinputoutputformodule()
-		{
-			// traverse the modules found in _modulescontainer
-			if (this._modulescontainer != null)
-			{
-				string _message = string.Empty;
-
-				int _modulecount = 0;
-				foreach (KeyValuePair<Guid, List<Object>> _modulecontainer in _modulescontainer)
-				{
-					var _module = _modulecontainer.Value[0].GetType();
-
-					_message += "[ module " + ++_modulecount + ". ] ";
-					_message += _module.Name + " ;name | " + _module.ToString() + " ;type | " + _modulecontainer.Key + " ;GUID {\n";
-
-					foreach (Object _instanceobject in _modulecontainer.Value)
-					{
-						Type _instance = _instanceobject.GetType();
-
-						_message += "\tan instance " + "\n"; // TODO: add instance GUID here
-
-						this._inputintoamoduleproperties(_instanceobject);
-
-						int _propertycount = 0;
-						foreach (PropertyInfo _property in _instance.GetProperties())
-						{
-							_message += "\t[ property " + ++_propertycount + ". ] ";
-							_message += _property.Name + " ;name || " + _property?.ToString()?.Split(" ").FirstOrDefault() + " ;type\n";
-						}
-					}
-
-					_message += "}\n";
-				}
-
-				Console.WriteLine(_message);
-			}
-		}
-
-		private void _inputintoamoduleproperties(Object _instanceobject)
-		{
-			// TODO:
-			if (_instanceobject != null)
-			{
-				Type _instance = _instanceobject.GetType();
-
-				Console.WriteLine("Enter values for each property: ");
-
-				int _propertycount = 0;
-				foreach (PropertyInfo _property in _instance?.GetProperties())
-				{
-					string _message = String.Empty;
-
-					_message += "\t[ property " + ++_propertycount + ". ] ";
-					_message +=  + _property.Name + " (" + _property?.ToString()?.Split(" ").FirstOrDefault() + "): ";
-				
-					this._setpropertyvalue(_property, _instanceobject, "Sector 52, Gurgaon");
-					this._getpropertyvalue(_property, _instanceobject);
-				}
-			}
-		}
-
-		private void _outputamoduleproperties(Object _instanceobject)
-		{
-			if (_instanceobject != null)
-			{
-				Type _instance = _instanceobject.GetType();
-
-				// TODO:
-				/* var _studentaddress = _instance.GetProperty("_address");
-				Console.Write(_studentaddress?.Name + " = ");
-
-				_studentaddress?.SetValue(_instanceobject, "Sector 52, Gurgaon", null);
-				Console.WriteLine( _studentaddress?.GetValue(_instanceobject, null)?.ToString()); */
-			}
-		}
-
-		private void _setpropertyvalue(PropertyInfo _property, Object _instanceobject, Object _value)
-		{
-			_property.SetValue(_instanceobject, _value, null);
-		}
-
-		private void _getpropertyvalue(PropertyInfo _property, Object _instanceobject)
-		{
-			_property.SetValue(_instanceobject, _value, null);
-			Console.WriteLine(_property.GetValue(_instanceobject, null)?.ToString());
 		}
 
 		public _moduleconfiguration _getsamplemoduleconfiguration()
