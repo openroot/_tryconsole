@@ -87,9 +87,12 @@ namespace _tryconsole
 					Type? _module = _modulecontainer.Value[0].GetType();
 
 					// output module order number
-					_message += "[module " + ++_modulecount + ".] ";
+					_message += "(module " + ++_modulecount + ".)" + Environment.NewLine;
+					_message += "[GUID] " + _modulecontainer.Key + Environment.NewLine;
 					// output module description
-					_message += _module.Name + " (name) | " + _module.ToString() + " (type)" + Environment.NewLine + _modulecontainer.Key + " (GUID)" + Environment.NewLine + "{";
+					_message += "[name] " +_module.Name + Environment.NewLine;
+					_message += "[type] " + _module.ToString() + Environment.NewLine;
+					_message += " {";
 					Console.WriteLine(_message);
 
 					int _instancecount = 0; // module counter
@@ -97,8 +100,10 @@ namespace _tryconsole
 					// loop through each instances for the module (if any)
 					foreach (Object _instanceobject in _modulecontainer.Value)
 					{
+						// output instance order number
+						_message = "\t(instance " + ++_instancecount + ".)" + Environment.NewLine;
 						// output instance description
-						_message = "\t[instance " + ++_instancecount + ".] " + _instanceobject.GetType().Name + " (name)"; // TODO: add instance GUID here
+						_message += "\t[name] " + _instanceobject.GetType().Name; // TODO: add instance GUID here
 						Console.WriteLine(_message);
 				
 						// pass the instance object to action propagator
@@ -143,9 +148,9 @@ namespace _tryconsole
 					_message = String.Empty;
 
 					// output property order number
-					_message += "\t\t[property " + ++_propertycount + ".] ";
+					_message += "\t\t(property " + ++_propertycount + ".) ";
 					// output property description
-					_message +=  _property.Name + " (" + _property?.ToString()?.Split(" ").FirstOrDefault() + ") ";
+					_message +=  _property.Name + " [" + _property?.ToString()?.Split(" ").FirstOrDefault() + "]";
 					Console.WriteLine(_message);
 
 					switch (_instanceoperation)
