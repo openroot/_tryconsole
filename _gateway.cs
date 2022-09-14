@@ -15,7 +15,11 @@ namespace _tryconsole
 			_gateway _gateway = new _gateway();
 
 			_gateway._createmodules();
-			_gateway._traversemodules();
+
+			char _instanceoperation = 'b'; // TODO: take operation choice from user
+			_gateway._traversemodules(_instanceoperation);
+			_gateway._traversemodules('i');
+			_gateway._traversemodules('o');
 
 			_gateway._miscfunction();
 		}
@@ -69,13 +73,11 @@ namespace _tryconsole
 			}
 		}
 
-		private void _traversemodules()
+		private void _traversemodules(char _instanceoperation)
 		{
 			// traverse the module container
 			if (this._modulescontainer != null)
 			{
-				char _instanceoperation = 'b'; // TODO: take operation choice from user
-
 				int _modulecount = 0; // module counter
 
 				// loop through modules (if any) found in module container
@@ -159,7 +161,7 @@ namespace _tryconsole
 							this._outputpropertyminimalbehaviour(_instanceobject);
 							break;
 						case 'i':
-							this._setpropertyvalue(_property, _instanceobject, "Sector 52, Gurgaon");
+							this._setpropertyvalue(_property, _instanceobject, "101 Sector 52, Gurgaon");
 							break;
 						case 'o':
 							this._getpropertyvalue(_property, _instanceobject);
@@ -186,6 +188,7 @@ namespace _tryconsole
 		private void _setpropertyvalue(PropertyInfo? _property, Object _instanceobject, Object _value)
 		{
 			if (_property != null) {
+				Console.WriteLine("Enter value for " + _property.Name + ": " + _value.ToString() + " (auto assigned)");
 				_property.SetValue(_instanceobject, _value, null);
 			}
 		}
@@ -209,10 +212,10 @@ namespace _tryconsole
 			_moduleconfiguration _samplemoduleconfiguration = new _moduleconfiguration(
 				"_student", 
 				new List<_propertyconfiguration>() {
-					new _propertyconfiguration("Int32", "_id"),
+					//new _propertyconfiguration("Int32", "_id"),
 					new _propertyconfiguration("String", "_fullname"),
 					new _propertyconfiguration("String", "_address"),
-					new _propertyconfiguration("Boolean", "_isdied")
+					//new _propertyconfiguration("Boolean", "_isdied")
 				}
 			);
 			return _samplemoduleconfiguration;
