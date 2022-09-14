@@ -21,7 +21,7 @@ namespace _tryconsole
 			_gateway._traversemodules('i');
 			_gateway._traversemodules('o');
 
-			_gateway._miscfunction();
+			_gateway._miscfunction1();
 		}
 
 		public void _createmodules()
@@ -221,7 +221,7 @@ namespace _tryconsole
 			return _samplemoduleconfiguration;
 		}
 
-		public void _miscfunction()
+		public void _miscfunction1()
 		{
 			Console.WriteLine("\n[ List of available types of properties: ]");
 			Console.WriteLine("int : " + typeof(int).Name);
@@ -234,6 +234,20 @@ namespace _tryconsole
 			Console.WriteLine("Int32 : " + typeof(Int32).Name);
 			Console.WriteLine("Int64 : " + typeof(Int64).Name);
 			Console.WriteLine("String : " + typeof(String).Name);
+		}
+
+		public void _miscfunction2()
+		{
+			do
+			{
+				DateTime _datetime = DateTime.Now;
+				Console.WriteLine("The time: {0:d} at {0:t}", _datetime);
+				TimeZoneInfo _timezone = TimeZoneInfo.Local;
+				Console.WriteLine("The time zone: {0}\n",
+									_timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
+				Console.Write("Press <Enter> to exit... ");
+			}
+			while (Console.ReadLine() == ConsoleKey.K.ToString());
 		}
 	}
 }
