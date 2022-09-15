@@ -10,27 +10,108 @@ namespace _tryconsole
 
 		public _gateway() {}
 
-		public static void Main(string[] args)
+		public static int Main(string[] args)
 		{
 			_gateway _gateway = new _gateway();
 
-			_gateway._createmodules();
+			_gateway._primarymenu();
 
-			char _instanceoperation = 'b'; // TODO: take operation choice from user
-			_gateway._traversemodules(_instanceoperation);
-			_gateway._traversemodules('i');
-			_gateway._traversemodules('o');
+			//_gateway._createmodules();
+			// char _instanceoperation = 'b'; // TODO: take operation choice from user
+			// _gateway._traversemodules(_instanceoperation);
+			// _gateway._traversemodules('i');
+			// _gateway._traversemodules('o');
 
-			_gateway._miscfunction1();
+			return 0;
+		}
+
+		private void _primarymenu()
+		{
+			string _message = String.Empty;
+			ConsoleKeyInfo _mayday;
+
+			do
+			{
+				_message += Environment.NewLine;
+				_message += "********************" + Environment.NewLine;
+				_message += "1. Press <esc> for Exit App." + Environment.NewLine;
+				_message += "2. Press <c> for Clearing Screen." + Environment.NewLine;
+				_message += "3. Press <f> for Opening Function Menu." + Environment.NewLine;
+				_message += "********************" + Environment.NewLine;
+				Console.Write(_message);
+
+				_mayday = this._improviseamayday();
+
+				switch (_mayday.Key)
+				{
+					case ConsoleKey.Escape:
+						Environment.Exit(0);
+						break;
+					case ConsoleKey.C:
+						Console.Clear();
+						break;
+					case ConsoleKey.F:
+						do
+						{
+							Console.Write(this._functionmenu());
+							_mayday = this._improviseamayday();
+
+							switch (_mayday.Key)
+							{
+								case ConsoleKey.A:
+									do
+									{
+										Console.Write(this._moduleoperationmenu());
+										_mayday = this._improviseamayday();
+									}
+									while (_mayday.Key != ConsoleKey.Escape); // TODO: update mechanism with previous menu
+									break;
+								case ConsoleKey.B:
+									this._miscfunction1();
+									break;
+								case ConsoleKey.C:
+									this._miscfunction2();
+									break;
+							}
+						}
+						while (_mayday.Key != ConsoleKey.Escape); // TODO: update mechanism with previous menu
+						break;
+				}
+			}
+			while (true);
+		}
+
+		private string _functionmenu()
+		{
+			string _message = String.Empty;
+
+			
+			_message += "********************" + Environment.NewLine;
+			_message += "1. Press <a> for Module Creation & Operations." + Environment.NewLine;
+			_message += "2. Press <b> for Misc Function 1." + Environment.NewLine;
+			_message += "3. Press <c> for Misc Function 2." + Environment.NewLine;
+			_message += "********************" + Environment.NewLine;
+			
+			return _message;
+		}
+
+		private string _moduleoperationmenu()
+		{
+			string _message = String.Empty;
+
+			_message += "********************" + Environment.NewLine;
+			_message += "1. Press <s> for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
+			_message += "2. Press <m> for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
+			_message += "3. Press <b> for Print Nominal Behavior for All Module Instances (properties)" + Environment.NewLine;
+			_message += "4. Press <i> for New Input for All Module Instances (properties)" + Environment.NewLine;
+			_message += "5. Press <o> for Printing All Module Instances (properties)" + Environment.NewLine;
+			_message += "********************" + Environment.NewLine;
+
+			return _message;
 		}
 
 		public void _createmodules()
 		{
-			/* Console.Write("Create (a)sample module (b)manual ,press corresponding bullet symbol: ");
-			var _action = Console.ReadLine();
-			switch (_action)
-			{ } */
-			
 			try
 			{
 				// TODO:
@@ -221,6 +302,14 @@ namespace _tryconsole
 			return _samplemoduleconfiguration;
 		}
 
+		private ConsoleKeyInfo _improviseamayday()
+		{
+			Console.Write("Press <esc> for get back to Previous Menu." + Environment.NewLine);
+			ConsoleKeyInfo _mayday = Console.ReadKey(true);
+			Console.WriteLine("Key Entered: " + _mayday.Key.ToString());
+			return _mayday;
+		}
+
 		public void _miscfunction1()
 		{
 			Console.WriteLine("\n[ List of available types of properties: ]");
@@ -238,16 +327,10 @@ namespace _tryconsole
 
 		public void _miscfunction2()
 		{
-			do
-			{
-				DateTime _datetime = DateTime.Now;
-				Console.WriteLine("The time: {0:d} at {0:t}", _datetime);
-				TimeZoneInfo _timezone = TimeZoneInfo.Local;
-				Console.WriteLine("The time zone: {0}\n",
-									_timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
-				Console.Write("Press <Enter> to exit... ");
-			}
-			while (Console.ReadLine() == ConsoleKey.K.ToString());
+			DateTime _datetime = DateTime.Now;
+			Console.WriteLine("The time: {0:d} at {0:T}", _datetime);
+			TimeZoneInfo _timezone = TimeZoneInfo.Local;
+			Console.WriteLine("The time zone: {0}\n", _timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
 		}
 	}
 }
