@@ -33,7 +33,7 @@ namespace _tryconsole
 			do
 			{
 				_message += Environment.NewLine;
-				_message += "********************" + Environment.NewLine;
+				_message += "[ MENU ]************" + Environment.NewLine;
 				_message += "1. Press <esc> for Exit App." + Environment.NewLine;
 				_message += "2. Press <c> for Clearing Screen." + Environment.NewLine;
 				_message += "3. Press <f> for Opening Function Menu." + Environment.NewLine;
@@ -63,6 +63,24 @@ namespace _tryconsole
 									{
 										Console.Write(this._moduleoperationmenu());
 										_mayday = this._improviseamayday();
+										switch (_mayday.Key)
+										{
+											case ConsoleKey.S:
+												this._createsamplemodule();
+												break;
+											case ConsoleKey.M:
+												this._createmodulemanually();
+												break;
+											case ConsoleKey.B:
+												this._traversemodules('b');
+												break;
+											case ConsoleKey.I:
+												this._traversemodules('i');
+												break;
+											case ConsoleKey.O:
+												this._traversemodules('o');
+												break;
+										}
 									}
 									while (_mayday.Key != ConsoleKey.Escape); // TODO: update mechanism with previous menu
 									break;
@@ -86,7 +104,7 @@ namespace _tryconsole
 			string _message = String.Empty;
 
 			
-			_message += "********************" + Environment.NewLine;
+			_message += "[ FUNCTION MENU ]***" + Environment.NewLine;
 			_message += "1. Press <a> for Module Creation & Operations." + Environment.NewLine;
 			_message += "2. Press <b> for Misc Function 1." + Environment.NewLine;
 			_message += "3. Press <c> for Misc Function 2." + Environment.NewLine;
@@ -99,7 +117,7 @@ namespace _tryconsole
 		{
 			string _message = String.Empty;
 
-			_message += "********************" + Environment.NewLine;
+			_message += "[ MODULE MENU ]*****" + Environment.NewLine;
 			_message += "1. Press <s> for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
 			_message += "2. Press <m> for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
 			_message += "3. Press <b> for Print Nominal Behavior for All Module Instances (properties)" + Environment.NewLine;
@@ -110,30 +128,9 @@ namespace _tryconsole
 			return _message;
 		}
 
-		public void _createmodules()
+		public void _createmodulemanually()
 		{
-			try
-			{
-				// TODO:
-				_moduleconfiguration _samplemoduleconfiguration = this._getsamplemoduleconfiguration();
-				_builddynamicmodule _dynamicmodule1 = new _builddynamicmodule(_samplemoduleconfiguration);
-				
-				Object? _newinstanceobject1 = _dynamicmodule1._haveaninstance();
-				this._addinstanceobjecttomodulescontainer(_newinstanceobject1);
-
-				// TODO:
-				_samplemoduleconfiguration._modulename = "_student_another";
-				_builddynamicmodule _dynamicmodule2 = new _builddynamicmodule(_samplemoduleconfiguration);
-				
-				Object? _newinstanceobject2 = _dynamicmodule2._haveaninstance();
-				this._addinstanceobjecttomodulescontainer(_newinstanceobject2);
-				Object? _newinstanceobject3 = _dynamicmodule2._haveaninstance();
-				this._addinstanceobjecttomodulescontainer(_newinstanceobject3);
-			}
-			catch (Exception _exception)
-			{
-				Console.WriteLine("EXCEPTION: " + _exception.Message);
-			}
+			
 		}
 
 		private void _addinstanceobjecttomodulescontainer(Object? _instanceobject)
@@ -220,7 +217,7 @@ namespace _tryconsole
 						_message += "\tValues for each properties are: ";
 						break;
 				}
-				
+
 				Console.WriteLine(_message);
 
 				int _propertycount = 0; // property counter
@@ -239,10 +236,10 @@ namespace _tryconsole
 					switch (_instanceoperation)
 					{
 						case 'b':
-							this._outputpropertyminimalbehaviour(_instanceobject);
+							this._outputpropertyminimalbehaviour(_property);
 							break;
 						case 'i':
-							this._setpropertyvalue(_property, _instanceobject, "101 Sector 52, Gurgaon");
+							//this._setpropertyvalue(_property, _instanceobject, _value);
 							break;
 						case 'o':
 							this._getpropertyvalue(_property, _instanceobject);
@@ -252,24 +249,14 @@ namespace _tryconsole
 			}
 		}
 
-		private void _outputpropertyminimalbehaviour(Object _instanceobject)
+		private void _outputpropertyminimalbehaviour(PropertyInfo? _property)
 		{
-			Type _instance = _instanceobject.GetType();
-
-			string _message = String.Empty;
-
-			int _propertycount = 0;
-			foreach (PropertyInfo _property in _instance.GetProperties())
-			{
-				_message += "\t[ property " + ++_propertycount + ". ] ";
-				_message += _property.Name + " ;name || " + _property?.ToString()?.Split(" ").FirstOrDefault() + " ;type\n";
-			}
+			if (_property != null) { }
 		}
 
 		private void _setpropertyvalue(PropertyInfo? _property, Object _instanceobject, Object _value)
 		{
 			if (_property != null) {
-				Console.WriteLine("Enter value for " + _property.Name + ": " + _value.ToString() + " (auto assigned)");
 				_property.SetValue(_instanceobject, _value, null);
 			}
 		}
@@ -288,31 +275,57 @@ namespace _tryconsole
 			Console.ReadLine(); */
 		}
 
-		public _moduleconfiguration _getsamplemoduleconfiguration()
+		private void _createsamplemodule()
 		{
+			// creating sample module configuration
 			_moduleconfiguration _samplemoduleconfiguration = new _moduleconfiguration(
 				"_student", 
 				new List<_propertyconfiguration>() {
-					//new _propertyconfiguration("Int32", "_id"),
+					new _propertyconfiguration("Int32", "_id"),
 					new _propertyconfiguration("String", "_fullname"),
 					new _propertyconfiguration("String", "_address"),
-					//new _propertyconfiguration("Boolean", "_isdied")
+					new _propertyconfiguration("Boolean", "_isdied")
 				}
 			);
-			return _samplemoduleconfiguration;
+
+			try
+			{
+				// creating sample module
+				_builddynamicmodule _module = new _builddynamicmodule(_samplemoduleconfiguration);
+				
+				// creating an arbitrary instance of newly created module
+				Object? _instanceobject = _module._haveaninstance();
+
+				// adding the newly created instance to module container
+				this._addinstanceobjecttomodulescontainer(_instanceobject);
+
+				// assigning sample values to the properties of the newly created instance
+				Type _instance = _instanceobject?.GetType() ?? typeof(Nullable);
+				if  (_instanceobject != null && _instance != typeof(Nullable))
+				{
+					this._setpropertyvalue(_instance.GetProperty("_id"), _instanceobject, 796);
+					this._setpropertyvalue(_instance.GetProperty("_fullname"), _instanceobject, "Debaprasad Tapader");
+					this._setpropertyvalue(_instance.GetProperty("_address"), _instanceobject, "Deoghar, JH, IN");
+					this._setpropertyvalue(_instance.GetProperty("_isdied"), _instanceobject, true);
+				}
+			}
+			catch (Exception _exception)
+			{
+				Console.WriteLine("EXCEPTION: " + _exception.Message);
+			}
 		}
 
 		private ConsoleKeyInfo _improviseamayday()
 		{
-			Console.Write("Press <esc> for get back to Previous Menu." + Environment.NewLine);
+			Console.WriteLine("Press <esc> for get back to Previous Menu." + Environment.NewLine);
 			ConsoleKeyInfo _mayday = Console.ReadKey(true);
-			Console.WriteLine("Key Entered: " + _mayday.Key.ToString());
+			Console.WriteLine("\t>> Option Selected: <" + _mayday.Key.ToString() + ">" + Environment.NewLine);
 			return _mayday;
 		}
 
 		public void _miscfunction1()
 		{
-			Console.WriteLine("\n[ List of available types of properties: ]");
+			Console.WriteLine("[ List of available types of properties: ]");
 			Console.WriteLine("int : " + typeof(int).Name);
 			Console.WriteLine("float : " + typeof(float).Name);
 			Console.WriteLine("double : " + typeof(double).Name);
