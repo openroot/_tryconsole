@@ -87,7 +87,7 @@ namespace _tryconsole
 			AssemblyName _assemblyname = new AssemblyName(this._moduleconfiguration._modulename);
 			AssemblyBuilder _assembly = AssemblyBuilder.DefineDynamicAssembly(_assemblyname, AssemblyBuilderAccess.Run);
 			
-			ModuleBuilder _module = _assembly.DefineDynamicModule("_module_" + this._moduleconfiguration._modulename);
+			ModuleBuilder _module = _assembly.DefineDynamicModule("_module" + this._moduleconfiguration._modulename);
 			this._type = _module.DefineType(_assemblyname.FullName, TypeAttributes.Public | TypeAttributes.Class | TypeAttributes.AutoClass | TypeAttributes.AnsiClass | TypeAttributes.BeforeFieldInit | TypeAttributes.AutoLayout, null);
 		}
 
@@ -96,15 +96,15 @@ namespace _tryconsole
 			if (this._type != null)
 			{
 				// basic field
-				FieldBuilder _field = this._type.DefineField("_field_" + _propertyname, _propertytype, FieldAttributes.Private);
+				FieldBuilder _field = this._type.DefineField("_field" + _propertyname, _propertytype, FieldAttributes.Private);
 				
-				MethodBuilder _get_method = this._type.DefineMethod("_get_" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, _propertytype, Type.EmptyTypes);
+				MethodBuilder _get_method = this._type.DefineMethod("_get" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, _propertytype, Type.EmptyTypes);
 				ILGenerator _get_immediatelanguage = _get_method.GetILGenerator();
 				_get_immediatelanguage.Emit(OpCodes.Ldarg_0);
 				_get_immediatelanguage.Emit(OpCodes.Ldfld, _field);
 				_get_immediatelanguage.Emit(OpCodes.Ret);
 				
-				MethodBuilder _set_method = this._type.DefineMethod("_set_" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null, new[]{_propertytype});
+				MethodBuilder _set_method = this._type.DefineMethod("_set" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null, new[]{_propertytype});
 				ILGenerator _set_immediatelanguage = _set_method.GetILGenerator();
 				Label _modifyproperty = _set_immediatelanguage.DefineLabel();
 				Label _exitset = _set_immediatelanguage.DefineLabel();
@@ -172,7 +172,7 @@ namespace _tryconsole
 	{
 		public Type _type { get; set; }
 		public string _name { get; set; }
-		public enum _systemdefaulttype { Int16, Int32, Int64, UInt16, UInt32, UInt64, Single, Double, Char, Boolean, String };
+		public enum _systemdefaulttype: byte { Int16, Int32, Int64, UInt16, UInt32, UInt64, Single, Double, Char, Boolean, String };
 
 		/// <summary>
 		/// Property configuration file
@@ -227,6 +227,18 @@ namespace _tryconsole
 			return _type;
 		}
 
+		public static bool _ispropertysystemdefaulttype(Type _type)
+		{
+			bool _issystemdefaulttype = false;
+
+			if (_type != null)
+			{
+				string _typeinstring = _type.ToString().Substring(7);
+				_issystemdefaulttype = Enum.IsDefined(typeof(_propertyconfiguration._systemdefaulttype), _typeinstring);
+			}
+
+			return _issystemdefaulttype;
+		}
 	}
 
 }

@@ -14,13 +14,14 @@ namespace _tryconsole
 		{
 			_gateway _gateway = new _gateway();
 
-			_gateway._primarymenu();
-
-			//_gateway._createmodules();
-			// char _instanceoperation = 'b'; // TODO: take operation choice from user
-			// _gateway._traversemodules(_instanceoperation);
-			// _gateway._traversemodules('i');
-			// _gateway._traversemodules('o');
+			try
+			{
+				_gateway._primarymenu();
+			}
+			catch (Exception _exception)
+			{
+				Console.WriteLine("ERROR: " + _exception.Message);
+			}
 
 			return 0;
 		}
@@ -33,11 +34,11 @@ namespace _tryconsole
 			do
 			{
 				_message += Environment.NewLine;
-				_message += "[ MENU ]************" + Environment.NewLine;
+				_message += "[ MENU ]******************************************" + Environment.NewLine;
 				_message += "1. Press <esc> for Exit App." + Environment.NewLine;
 				_message += "2. Press <c> for Clearing Screen." + Environment.NewLine;
 				_message += "3. Press <f> for Opening Function Menu." + Environment.NewLine;
-				_message += "********************" + Environment.NewLine;
+				_message += "**************************************************" + Environment.NewLine;
 				Console.Write(_message);
 
 				_mayday = this._improviseamayday();
@@ -56,6 +57,9 @@ namespace _tryconsole
 							Console.Write(this._functionmenu());
 							_mayday = this._improviseamayday();
 
+							if (_mayday.Key != ConsoleKey.Escape) {
+								Console.WriteLine("|||||||||||||||||||||||||||||||||||||");
+							}
 							switch (_mayday.Key)
 							{
 								case ConsoleKey.A:
@@ -68,17 +72,17 @@ namespace _tryconsole
 											case ConsoleKey.S:
 												this._createsamplemodule();
 												break;
-											case ConsoleKey.M:
-												this._createmodulemanually();
-												break;
-											case ConsoleKey.B:
-												this._traversemodules('b');
-												break;
-											case ConsoleKey.I:
-												this._traversemodules('i');
+											case ConsoleKey.C:
+												this._traversemodules('c');
 												break;
 											case ConsoleKey.O:
 												this._traversemodules('o');
+												break;
+											case ConsoleKey.M:
+												this._createmodulemanually();
+												break;
+											case ConsoleKey.I:
+												this._traversemodules('i');
 												break;
 										}
 									}
@@ -91,6 +95,9 @@ namespace _tryconsole
 									this._miscfunction2();
 									break;
 							}
+							if (_mayday.Key != ConsoleKey.Escape) {
+								Console.WriteLine("|||||||||||||||||||||||||||||||||||||");
+							}
 						}
 						while (_mayday.Key != ConsoleKey.Escape); // TODO: update mechanism with previous menu
 						break;
@@ -102,13 +109,12 @@ namespace _tryconsole
 		private string _functionmenu()
 		{
 			string _message = String.Empty;
-
 			
-			_message += "[ FUNCTION MENU ]***" + Environment.NewLine;
+			_message += "[ FUNCTION MENU ]*********************************" + Environment.NewLine;
 			_message += "1. Press <a> for Module Creation & Operations." + Environment.NewLine;
 			_message += "2. Press <b> for Misc Function 1." + Environment.NewLine;
 			_message += "3. Press <c> for Misc Function 2." + Environment.NewLine;
-			_message += "********************" + Environment.NewLine;
+			_message += "**************************************************" + Environment.NewLine;
 			
 			return _message;
 		}
@@ -117,13 +123,13 @@ namespace _tryconsole
 		{
 			string _message = String.Empty;
 
-			_message += "[ MODULE MENU ]*****" + Environment.NewLine;
+			_message += "[ MODULE MENU ]***********************************" + Environment.NewLine;
 			_message += "1. Press <s> for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
-			_message += "2. Press <m> for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
-			_message += "3. Press <b> for Print Nominal Behavior for All Module Instances (properties)" + Environment.NewLine;
-			_message += "4. Press <i> for New Input for All Module Instances (properties)" + Environment.NewLine;
-			_message += "5. Press <o> for Printing All Module Instances (properties)" + Environment.NewLine;
-			_message += "********************" + Environment.NewLine;
+			_message += "2. Press <c> for Output Cultural Behavior for All Module Instances (properties)" + Environment.NewLine;
+			_message += "3. Press <o> for Output All Module Instances (properties)" + Environment.NewLine;
+			_message += "4. Press <m> for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
+			_message += "5. Press <i> for New Input for All Module Instances (properties)" + Environment.NewLine;
+			_message += "**************************************************" + Environment.NewLine;
 
 			return _message;
 		}
@@ -166,14 +172,14 @@ namespace _tryconsole
 					// module type
 					Type? _module = _modulecontainer.Value[0].GetType();
 
+					_message += _modulecount > 0 ? Environment.NewLine : String.Empty;
+
 					// output module order number
-					_message += "(module " + ++_modulecount + ".)" + Environment.NewLine;
-					_message += "[GUID] " + _modulecontainer.Key + Environment.NewLine;
+					_message += Environment.NewLine + "--(**module (" + ++_modulecount + ".))" + Environment.NewLine;
 					// output module description
-					_message += "[name] " +_module.Name + Environment.NewLine;
-					_message += "[type] " + _module.ToString() + Environment.NewLine;
-					_message += " {";
-					Console.WriteLine(_message);
+					_message += _module.FullName + " [" + _modulecontainer.Key + "]" + Environment.NewLine;
+					_message += "[[[";
+					Console.Write(_message);
 
 					int _instancecount = 0; // module counter
 
@@ -181,44 +187,53 @@ namespace _tryconsole
 					foreach (Object _instanceobject in _modulecontainer.Value)
 					{
 						// output instance order number
-						_message = "\t(instance " + ++_instancecount + ".)" + Environment.NewLine;
+						_message = Environment.NewLine + "\t(**instance (" + ++_instancecount + ".))" + Environment.NewLine;
 						// output instance description
-						_message += "\t[name] " + _instanceobject.GetType().Name; // TODO: add instance GUID here
-						Console.WriteLine(_message);
+						_message += "\t" + _instanceobject.GetType().Name + " [" + _modulecontainer.Key + "]"; // TODO: add instance GUID here
+						Console.Write(_message);
 				
 						// pass the instance object to action propagator
-						this._instanceactions(_instanceobject, _instanceoperation);
+						int _objectindentcount = 0;
+						this._instanceactions(_instanceobject, _instanceoperation, _objectindentcount, _modulecontainer.Key);
 					}
 
-					_message = "}";
-					Console.WriteLine(_message);
+					_message = Environment.NewLine + "]]]";
+					Console.Write(_message);
 				}
-
 			}
 		}
 
-		private void _instanceactions(Object _instanceobject, char _instanceoperation)
+		private void _instanceactions(Object? _instanceobject, char _instanceoperation, int _objectindentcount, Guid _moduleguid)
 		{
 			if (_instanceobject != null)
 			{
+				// set object indent
+				++_objectindentcount; // it denotes this instances current level
+				string _objectindent = string.Empty;
+				for (int _index = 0; _index < _objectindentcount; _index++) {
+					_objectindent += "\t";
+				}
+				
 				Type _instance = _instanceobject.GetType();
 
 				string _message = String.Empty;
 
+				// output START
+				// add indent to START only if instance level is first
+				_message += (_objectindentcount == 1) ? _objectindent : string.Empty;
 				switch (_instanceoperation)
 				{
-					case 'b':
-						_message += "\tNominal behaviour:";
-						break;
-					case 'i':
-						_message += "\tEnter values for each property: ";
+					case 'c':
+						_message += " {";
 						break;
 					case 'o':
-						_message += "\tValues for each properties are: ";
+						_message += " {";
+						break;
+					case 'i':
+						_message += " (Enter values for each property:) {";
 						break;
 				}
-
-				Console.WriteLine(_message);
+				Console.Write(_message);
 
 				int _propertycount = 0; // property counter
 
@@ -227,25 +242,43 @@ namespace _tryconsole
 				{
 					_message = String.Empty;
 
+					// get if property is system default type
+					bool _ispropertysystemdefaulttype = _propertyconfiguration._ispropertysystemdefaulttype(_property.PropertyType);
+
 					// output property order number
-					_message += "\t\t(property " + ++_propertycount + ".) ";
+					_message += Environment.NewLine + _objectindent + "\t(" + ++_propertycount + ".) ";
 					// output property description
-					_message +=  _property.Name + " [" + _property?.ToString()?.Split(" ").FirstOrDefault() + "]";
-					Console.WriteLine(_message);
+					// TODO: update GUID plated here with 'original' module GUID
+					_message +=  _property.Name + " [" + (_ispropertysystemdefaulttype ? _property?.PropertyType.FullName : _moduleguid) + "]";
 
 					switch (_instanceoperation)
 					{
-						case 'b':
+						case 'c':
 							this._outputpropertyminimalbehaviour(_property);
 							break;
-						case 'i':
-							//this._setpropertyvalue(_property, _instanceobject, _value);
-							break;
 						case 'o':
-							this._getpropertyvalue(_property, _instanceobject);
+							string _propertyvalueinstring = this._getpropertyvalue(_property, _instanceobject)?.ToString() ?? "N/A (null)";
+							_message += " = " + (!_propertyvalueinstring.Equals("N/A (null)") ? _ispropertysystemdefaulttype ? _propertyvalueinstring : string.Empty : _propertyvalueinstring);
+							break;
+						case 'i':
+							// TODO: take input from console
+							Object? _propertyvalue = new Object();
+							this._setpropertyvalue(_property, _instanceobject, _propertyvalue);
 							break;
 					}
+					
+					Console.Write(_message);
+		
+					// call a recursive here if it's (property) not a system default type
+					if (_property != null && !_ispropertysystemdefaulttype)
+					{
+						int _objectindentcountnext = _objectindentcount;
+						this._instanceactions(this._getpropertyvalue(_property, _instanceobject), _instanceoperation, _objectindentcountnext, _moduleguid);
+					}
 				}
+
+				// output END
+				Console.Write(Environment.NewLine + _objectindent + "}");
 			}
 		}
 
@@ -254,21 +287,39 @@ namespace _tryconsole
 			if (_property != null) { }
 		}
 
-		private void _setpropertyvalue(PropertyInfo? _property, Object _instanceobject, Object _value)
+		private void _setpropertyvalue(PropertyInfo? _property, Object? _instanceobject, Object? _value)
 		{
-			if (_property != null) {
-				_property.SetValue(_instanceobject, _value, null);
+			if (_property != null && _instanceobject != null)
+			{
+				try
+				{
+					_property.SetValue(_instanceobject, _value, null);
+				}
+				catch (Exception _exception)
+				{
+					throw new Exception("EXCEPTION: " + _exception.Message);
+				}
 			}
 		}
 
-		private void _getpropertyvalue(PropertyInfo? _property, Object _instanceobject)
+		private Object? _getpropertyvalue(PropertyInfo? _property, Object? _instanceobject)
 		{
-			if (_property != null) {
-				Console.WriteLine(_property.GetValue(_instanceobject, null)?.ToString());
+			Object? _value = null;
+			if (_property != null && _instanceobject != null)
+			{
+				try
+				{
+					_value = _property?.GetValue(_instanceobject, null);
+				}
+				catch (Exception _exception)
+				{
+					throw new Exception("EXCEPTION: " + _exception.Message);
+				}
 			}
+			return _value;
 		}
 
-		private void _readmoduleconfiguration()
+		private void _inputmoduleconfiguration()
 		{
 			// TODO:
 			/* Console.WriteLine("Enter a string: ");
@@ -290,23 +341,58 @@ namespace _tryconsole
 
 			try
 			{
-				// creating sample module
-				_builddynamicmodule _module = new _builddynamicmodule(_samplemoduleconfiguration);
+				// creating sample dynamic module
+				_builddynamicmodule _module_student = new _builddynamicmodule(_samplemoduleconfiguration);
 				
 				// creating an arbitrary instance of newly created module
-				Object? _instanceobject = _module._haveaninstance();
+				Object? _instanceobject_student = _module_student._haveaninstance();
 
 				// adding the newly created instance to module container
-				this._addinstanceobjecttomodulescontainer(_instanceobject);
+				this._addinstanceobjecttomodulescontainer(_instanceobject_student);
 
 				// assigning sample values to the properties of the newly created instance
-				Type _instance = _instanceobject?.GetType() ?? typeof(Nullable);
-				if  (_instanceobject != null && _instance != typeof(Nullable))
+				Type _instance_student = _instanceobject_student?.GetType() ?? typeof(Nullable);
+				if (_instanceobject_student != null && _instance_student != typeof(Nullable))
 				{
-					this._setpropertyvalue(_instance.GetProperty("_id"), _instanceobject, 796);
-					this._setpropertyvalue(_instance.GetProperty("_fullname"), _instanceobject, "Debaprasad Tapader");
-					this._setpropertyvalue(_instance.GetProperty("_address"), _instanceobject, "Deoghar, JH, IN");
-					this._setpropertyvalue(_instance.GetProperty("_isdied"), _instanceobject, true);
+					this._setpropertyvalue(_instance_student.GetProperty("_id"), _instanceobject_student, 796);
+					this._setpropertyvalue(_instance_student.GetProperty("_fullname"), _instanceobject_student, "Debaprasad Tapader");
+					this._setpropertyvalue(_instance_student.GetProperty("_address"), _instanceobject_student, "Deoghar, JH, IN");
+					this._setpropertyvalue(_instance_student.GetProperty("_isdied"), _instanceobject_student, true);
+				}
+
+
+				// Sampling dynamic module inside another dynamic module
+				_moduleconfiguration _samplemoduleconfiguration_scholar = new _moduleconfiguration(
+					"_scholar", 
+					new List<_propertyconfiguration>() {
+						new _propertyconfiguration(_instance_student, "_student"),
+						new _propertyconfiguration("String", "_sector"),
+						new _propertyconfiguration("Int32", "_year"),
+						new _propertyconfiguration("Boolean", "_isactive")
+					}
+				);
+				_builddynamicmodule _module_scholar = new _builddynamicmodule(_samplemoduleconfiguration_scholar);
+				Object? _instanceobject_scholar1 = _module_scholar._haveaninstance();
+				this._addinstanceobjecttomodulescontainer(_instanceobject_scholar1);
+				// assigning sample values to the properties of the newly created instance
+				Type _instance_scholar1 = _instanceobject_scholar1?.GetType() ?? typeof(Nullable);
+				if (_instanceobject_scholar1 != null && _instance_scholar1 != typeof(Nullable) && _instanceobject_student != null)
+				{
+					this._setpropertyvalue(_instance_scholar1.GetProperty("_student"), _instanceobject_scholar1, _instanceobject_student);
+					this._setpropertyvalue(_instance_scholar1.GetProperty("_sector"), _instanceobject_scholar1, "Matter Design");
+					this._setpropertyvalue(_instance_scholar1.GetProperty("_year"), _instanceobject_scholar1, 2003);
+					this._setpropertyvalue(_instance_scholar1.GetProperty("_isactive"), _instanceobject_scholar1, true);
+				}
+				Object? _instanceobject_scholar2 = _module_scholar._haveaninstance();
+				this._addinstanceobjecttomodulescontainer(_instanceobject_scholar2);
+				// assigning sample values to the properties of the newly created instance
+				Type _instance_scholar2 = _instanceobject_scholar2?.GetType() ?? typeof(Nullable);
+				if (_instanceobject_scholar2 != null && _instance_scholar2 != typeof(Nullable))
+				{
+					this._setpropertyvalue(_instance_scholar2.GetProperty("_student"), _instanceobject_scholar2, null);
+					this._setpropertyvalue(_instance_scholar2.GetProperty("_sector"), _instanceobject_scholar2, "Classic Culture");
+					this._setpropertyvalue(_instance_scholar2.GetProperty("_year"), _instanceobject_scholar2, 2005);
+					this._setpropertyvalue(_instance_scholar2.GetProperty("_isactive"), _instanceobject_scholar2, true);
 				}
 			}
 			catch (Exception _exception)
@@ -317,9 +403,9 @@ namespace _tryconsole
 
 		private ConsoleKeyInfo _improviseamayday()
 		{
-			Console.WriteLine("Press <esc> for get back to Previous Menu." + Environment.NewLine);
+			Console.WriteLine("Press <esc> for get back to Previous Menu.");
 			ConsoleKeyInfo _mayday = Console.ReadKey(true);
-			Console.WriteLine("\t>> Option Selected: <" + _mayday.Key.ToString() + ">" + Environment.NewLine);
+			Console.WriteLine(">>> Option Selected: <" + _mayday.Key.ToString() + ">");
 			return _mayday;
 		}
 
@@ -343,7 +429,7 @@ namespace _tryconsole
 			DateTime _datetime = DateTime.Now;
 			Console.WriteLine("The time: {0:d} at {0:T}", _datetime);
 			TimeZoneInfo _timezone = TimeZoneInfo.Local;
-			Console.WriteLine("The time zone: {0}\n", _timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
+			Console.WriteLine("The time zone: {0}", _timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
 		}
 	}
 }
