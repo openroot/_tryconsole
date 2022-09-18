@@ -204,10 +204,10 @@ namespace _tryconsole
 		private void _showprimarymenu(bool _iscreatefreshmenu)
 		{
 			// TODO: update menu string into List<>
+			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkMagenta);
 			if (_iscreatefreshmenu) {
 				Console.Clear();
 			}
-			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkRed);
 			string _message = string.Empty;
 			_message += "[ MENU ]****************************************************" + Environment.NewLine;
 			_message += "1. Press < ESC > for Exit App." + Environment.NewLine;
@@ -219,10 +219,10 @@ namespace _tryconsole
 
 		private void _showfunctionmenu(bool _iscreatefreshmenu)
 		{
+			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkCyan);
 			if (_iscreatefreshmenu) {
 				Console.Clear();
 			}
-			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.Red);
 			string _message = string.Empty;
 			_message += "[ FUNCTION MENU ]*******************************************" + Environment.NewLine;
 			_message += "1. Press < A > for Module Creation & Operations **(sub-menu)" + Environment.NewLine;
@@ -234,10 +234,10 @@ namespace _tryconsole
 
 		private void _showmoduleoperationmenu( bool _iscreatefreshmenu)
 		{
+			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkCyan);
 			if (_iscreatefreshmenu) {
 				Console.Clear();
 			}
-			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.Red);
 			string _message = string.Empty;
 			_message += "[ MODULE MENU ]******************************************************************" + Environment.NewLine;
 			_message += "1. Press < S > for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
@@ -272,15 +272,15 @@ namespace _tryconsole
 
 		private void _showfunctiondivider([Optional]bool _istopdivider)
 		{
+			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.Magenta);	
 			string _message = string.Empty;
 			_message += _istopdivider ? Environment.NewLine + Environment.NewLine : Environment.NewLine;
 			_message += "==================================================";
 			_message += !_istopdivider ? Environment.NewLine + Environment.NewLine : string.Empty;
 			Console.Write(_message);
-			if (_istopdivider) {
-				//Console.Clear();
-				this._consolecolorchanger(ConsoleColor.Black, ConsoleColor.Yellow);		
-			}
+			// if (_istopdivider) {
+			// 	this._consolecolorchanger(ConsoleColor.Black, ConsoleColor.Yellow);		
+			// }
 		}
 
 		private void _showwrongmayday()
@@ -292,9 +292,8 @@ namespace _tryconsole
 
 		private void _consolecolorchanger(ConsoleColor _foreground , [Optional]ConsoleColor _background)
 		{
-			// TODO: look for the color case here
-			// Console.ForegroundColor = _foreground;
-			// Console.BackgroundColor = _background;
+			Console.ForegroundColor = _foreground;
+			Console.BackgroundColor = _background;
 		}
 
 		#endregion
