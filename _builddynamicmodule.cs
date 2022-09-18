@@ -143,8 +143,7 @@ namespace _tryconsole
 					_instanceobject = Activator.CreateInstance(_type);
 				}
 			}
-			catch (Exception _exception)
-			{
+			catch (Exception _exception) {
 				throw new Exception("Could not instantiate TypeBuilder", _exception);
 			}
 			return _instanceobject;

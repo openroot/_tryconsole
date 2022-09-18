@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.InteropServices;
 
 namespace _tryconsole
 {
@@ -14,130 +15,250 @@ namespace _tryconsole
 		{
 			_gateway _gateway = new _gateway();
 
-			try
-			{
-				_gateway._primarymenu();
+			try {
+				_gateway._executeprimarymenu();
 			}
-			catch (Exception _exception)
-			{
+			catch (Exception _exception) {
 				Console.WriteLine("ERROR: " + _exception.Message);
 			}
 
 			return 0;
 		}
 
-		private void _primarymenu()
+		#region TryConsole App Menu Section
+
+		private void _executeprimarymenu()
 		{
-			string _message = String.Empty;
-			ConsoleKeyInfo _mayday;
-
-			do
+			// loop through 'primary menu'
+			ConsoleKeyInfo _maydayprimarymenu = new ConsoleKeyInfo();
+			while (true)
 			{
-				_message += Environment.NewLine;
-				_message += "[ MENU ]******************************************" + Environment.NewLine;
-				_message += "1. Press <esc> for Exit App." + Environment.NewLine;
-				_message += "2. Press <c> for Clearing Screen." + Environment.NewLine;
-				_message += "3. Press <f> for Opening Function Menu." + Environment.NewLine;
-				_message += "**************************************************" + Environment.NewLine;
-				Console.Write(_message);
-
-				_mayday = this._improviseamayday();
-
-				switch (_mayday.Key)
+				switch (_maydayprimarymenu.Key)
 				{
-					case ConsoleKey.Escape:
-						Environment.Exit(0);
-						break;
+					// clear the Console screen
 					case ConsoleKey.C:
 						Console.Clear();
 						break;
-					case ConsoleKey.F:
-						do
+					
+					// loop through 'function menu'
+					case ConsoleKey.F:						
+						ConsoleKeyInfo _maydayfunctionmenu = new ConsoleKeyInfo();
+						bool _isonceenteredalreadyfunctionmenu = false;
+						while (true)
 						{
-							Console.Write(this._functionmenu());
-							_mayday = this._improviseamayday();
-
-							if (_mayday.Key != ConsoleKey.Escape) {
-								Console.WriteLine("|||||||||||||||||||||||||||||||||||||");
-							}
-							switch (_mayday.Key)
+							// show menu at top
+							if (!_isonceenteredalreadyfunctionmenu)
 							{
+								// show the 'function menu'
+								this._showfunctionmenu(true);
+								_maydayfunctionmenu = this._improviseamayday(false);
+							}
+							else
+							{
+								// show the 'function menu', but don't take keyboard input
+								this._showfunctionmenu(true);
+								_maydayfunctionmenu = this._improviseamayday(false, _maydayfunctionmenu);
+							}
+
+							switch (_maydayfunctionmenu.Key)
+							{
+								// loop through 'module operation menu'
 								case ConsoleKey.A:
-									do
+									ConsoleKeyInfo _maydaymoduleoperationmenu = new ConsoleKeyInfo();
+									bool _isonceenteredalreadymoduleopeartionmenu = false;
+									while (true)
 									{
-										Console.Write(this._moduleoperationmenu());
-										_mayday = this._improviseamayday();
-										switch (_mayday.Key)
+										// show menu at top
+										if (!_isonceenteredalreadymoduleopeartionmenu)
+										{
+											// show the 'module operation menu'
+											this._showmoduleoperationmenu(true);
+											_maydaymoduleoperationmenu = this._improviseamayday(false);
+										}
+										else
+										{
+											// show the 'module operation menu', but don't take keyboard input
+											this._showmoduleoperationmenu(true);
+											_maydaymoduleoperationmenu = this._improviseamayday(false, _maydaymoduleoperationmenu);
+										}
+
+										switch (_maydaymoduleoperationmenu.Key)
 										{
 											case ConsoleKey.S:
+												this._showfunctiondivider(true);
 												this._createsamplemodule();
+												this._showfunctiondivider();
 												break;
 											case ConsoleKey.C:
+												this._showfunctiondivider(true);
 												this._traversemodules('c');
+												this._showfunctiondivider();
 												break;
 											case ConsoleKey.O:
+												this._showfunctiondivider(true);
 												this._traversemodules('o');
+												this._showfunctiondivider();
 												break;
 											case ConsoleKey.M:
+												this._showfunctiondivider(true);
 												this._createmodulemanually();
+												this._showfunctiondivider();
 												break;
 											case ConsoleKey.I:
+												this._showfunctiondivider(true);
 												this._traversemodules('i');
+												this._showfunctiondivider();
+												break;
+											default:
 												break;
 										}
+
+										if (_maydaymoduleoperationmenu.Key == ConsoleKey.Escape)
+										{
+											Console.Clear();
+											break;
+										}
+										else
+										{
+											// show menu at bottom
+											// show the 'module operation menu'
+											this._showmoduleoperationmenu(false);
+											_maydaymoduleoperationmenu = this._improviseamayday(false);
+
+											_isonceenteredalreadymoduleopeartionmenu = true;
+										}
 									}
-									while (_mayday.Key != ConsoleKey.Escape); // TODO: update mechanism with previous menu
 									break;
 								case ConsoleKey.B:
+									this._showfunctiondivider(true);
 									this._miscfunction1();
+									this._showfunctiondivider();
 									break;
 								case ConsoleKey.C:
+									this._showfunctiondivider(true);
 									this._miscfunction2();
+									this._showfunctiondivider();
+									break;
+								default:
 									break;
 							}
-							if (_mayday.Key != ConsoleKey.Escape) {
-								Console.WriteLine("|||||||||||||||||||||||||||||||||||||");
+
+							if (_maydayfunctionmenu.Key == ConsoleKey.Escape)
+							{
+								Console.Clear();
+								break;
+							}
+							else
+							{
+								// show menu at bottom
+								// show the 'function menu'
+								this._showfunctionmenu(false);
+								_maydayfunctionmenu = this._improviseamayday(false);
+
+								_isonceenteredalreadyfunctionmenu = true;
 							}
 						}
-						while (_mayday.Key != ConsoleKey.Escape); // TODO: update mechanism with previous menu
+						break;
+					default:
 						break;
 				}
+
+				// show the 'primary menu'
+				this._showprimarymenu();
+				_maydayprimarymenu = this._improviseamayday(true);
+				if (_maydayprimarymenu.Key == ConsoleKey.Escape) { break; }
 			}
-			while (true);
 		}
 
-		private string _functionmenu()
+		private void _showprimarymenu()
 		{
-			string _message = String.Empty;
-			
+			Console.Clear();
+			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkRed);
+			string _message = Environment.NewLine + Environment.NewLine;
+			_message += "[ MENU ]******************************************" + Environment.NewLine;
+			_message += "1. Press < ESC > for Exit App." + Environment.NewLine;
+			_message += "2. Press < C > for Clearing Screen." + Environment.NewLine;
+			_message += "3. Press < F > for Opening Function Menu." + Environment.NewLine;
+			_message += "**************************************************";
+			Console.Write(_message);
+		}
+
+		private void _showfunctionmenu(bool _iscreatefreshmenu)
+		{
+			if (_iscreatefreshmenu) {
+				Console.Clear();
+			}
+			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.Red);
+			string _message = Environment.NewLine + Environment.NewLine;
 			_message += "[ FUNCTION MENU ]*********************************" + Environment.NewLine;
-			_message += "1. Press <a> for Module Creation & Operations." + Environment.NewLine;
-			_message += "2. Press <b> for Misc Function 1." + Environment.NewLine;
-			_message += "3. Press <c> for Misc Function 2." + Environment.NewLine;
-			_message += "**************************************************" + Environment.NewLine;
-			
-			return _message;
+			_message += "1. Press < A > for Module Creation & Operations." + Environment.NewLine;
+			_message += "2. Press < B > for Misc Function 1." + Environment.NewLine;
+			_message += "3. Press < C > for Misc Function 2." + Environment.NewLine;
+			_message += "**************************************************";
+			Console.Write(_message);
 		}
 
-		private string _moduleoperationmenu()
+		private void _showmoduleoperationmenu( bool _iscreatefreshmenu)
 		{
-			string _message = String.Empty;
-
+			if (_iscreatefreshmenu) {
+				Console.Clear();
+			}
+			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.Red);
+			string _message = Environment.NewLine + Environment.NewLine;
 			_message += "[ MODULE MENU ]***********************************" + Environment.NewLine;
-			_message += "1. Press <s> for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
-			_message += "2. Press <c> for Output Cultural Behavior for All Module Instances (properties)" + Environment.NewLine;
-			_message += "3. Press <o> for Output All Module Instances (properties)" + Environment.NewLine;
-			_message += "4. Press <m> for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
-			_message += "5. Press <i> for New Input for All Module Instances (properties)" + Environment.NewLine;
-			_message += "**************************************************" + Environment.NewLine;
-
-			return _message;
+			_message += "1. Press < S > for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
+			_message += "2. Press < C > for Output Cultural Behavior for All Module Instances (properties)" + Environment.NewLine;
+			_message += "3. Press < O > for Output All Module Instances (properties)" + Environment.NewLine;
+			_message += "4. Press < M > for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
+			_message += "5. Press < I > for New Input for All Module Instances (properties)" + Environment.NewLine;
+			_message += "**************************************************";
+			Console.Write(_message);
 		}
 
-		public void _createmodulemanually()
+		private ConsoleKeyInfo _improviseamayday(bool _isprimarymenu, [Optional]ConsoleKeyInfo _maydayexistingifany)
 		{
+			ConsoleKeyInfo _mayday = new ConsoleKeyInfo();
+
+			string _message = string.Empty;
+			_message = !_isprimarymenu ? Environment.NewLine + "Press < ESC > for get back to Previous Menu." : string.Empty;
+			Console.Write(_message);
+
+			if (_maydayexistingifany == default(ConsoleKeyInfo)) {
+				_mayday = Console.ReadKey(true);
+			}
+			else {
+				_mayday = _maydayexistingifany;
+			}
 			
+			_message = Environment.NewLine + Environment.NewLine + "\\\\\\ OPTION SELECTED \\\\\\ < " + _mayday.Key.ToString() + " >";
+			Console.Write(_message);
+			
+			return _mayday;
 		}
+
+		private void _consolecolorchanger(ConsoleColor _foreground , [Optional]ConsoleColor _background)
+		{
+			// Console.ForegroundColor = _foreground;
+			// Console.BackgroundColor = _background;
+		}
+
+		private void _showfunctiondivider([Optional]bool _istopone)
+		{
+			string _message = string.Empty;
+			_message += _istopone ? Environment.NewLine + Environment.NewLine : Environment.NewLine;
+			_message += "==================================================";
+			Console.Write(_message);
+			if (_istopone) {
+				//Console.Clear();
+				this._consolecolorchanger(ConsoleColor.Black, ConsoleColor.Yellow);		
+			}
+		}
+
+		#endregion
+
+		#region TryConsole App Functionalities
+
+		#region Module Operations
 
 		private void _addinstanceobjecttomodulescontainer(Object? _instanceobject)
 		{
@@ -254,7 +375,7 @@ namespace _tryconsole
 					switch (_instanceoperation)
 					{
 						case 'c':
-							this._outputpropertyminimalbehaviour(_property);
+							this._outputpropertyculturalbehaviour(_property);
 							break;
 						case 'o':
 							string _propertyvalueinstring = this._getpropertyvalue(_property, _instanceobject)?.ToString() ?? "N/A (null)";
@@ -280,50 +401,6 @@ namespace _tryconsole
 				// output END
 				Console.Write(Environment.NewLine + _objectindent + "}");
 			}
-		}
-
-		private void _outputpropertyminimalbehaviour(PropertyInfo? _property)
-		{
-			if (_property != null) { }
-		}
-
-		private void _setpropertyvalue(PropertyInfo? _property, Object? _instanceobject, Object? _value)
-		{
-			if (_property != null && _instanceobject != null)
-			{
-				try
-				{
-					_property.SetValue(_instanceobject, _value, null);
-				}
-				catch (Exception _exception)
-				{
-					throw new Exception("EXCEPTION: " + _exception.Message);
-				}
-			}
-		}
-
-		private Object? _getpropertyvalue(PropertyInfo? _property, Object? _instanceobject)
-		{
-			Object? _value = null;
-			if (_property != null && _instanceobject != null)
-			{
-				try
-				{
-					_value = _property?.GetValue(_instanceobject, null);
-				}
-				catch (Exception _exception)
-				{
-					throw new Exception("EXCEPTION: " + _exception.Message);
-				}
-			}
-			return _value;
-		}
-
-		private void _inputmoduleconfiguration()
-		{
-			// TODO:
-			/* Console.WriteLine("Enter a string: ");
-			Console.ReadLine(); */
 		}
 
 		private void _createsamplemodule()
@@ -394,42 +471,92 @@ namespace _tryconsole
 					this._setpropertyvalue(_instance_scholar2.GetProperty("_year"), _instanceobject_scholar2, 2005);
 					this._setpropertyvalue(_instance_scholar2.GetProperty("_isactive"), _instanceobject_scholar2, true);
 				}
+
+				Console.Write(Environment.NewLine + "Sample Module Has Been Created. Congrats!");
 			}
-			catch (Exception _exception)
-			{
+			catch (Exception _exception) {
 				Console.WriteLine("EXCEPTION: " + _exception.Message);
 			}
 		}
 
-		private ConsoleKeyInfo _improviseamayday()
+		private void _setpropertyvalue(PropertyInfo? _property, Object? _instanceobject, Object? _value)
 		{
-			Console.WriteLine("Press <esc> for get back to Previous Menu.");
-			ConsoleKeyInfo _mayday = Console.ReadKey(true);
-			Console.WriteLine(">>> Option Selected: <" + _mayday.Key.ToString() + ">");
-			return _mayday;
+			if (_property != null && _instanceobject != null)
+			{
+				try {
+					_property.SetValue(_instanceobject, _value, null);
+				}
+				catch (Exception _exception) {
+					throw new Exception("EXCEPTION: " + _exception.Message);
+				}
+			}
 		}
+
+		private Object? _getpropertyvalue(PropertyInfo? _property, Object? _instanceobject)
+		{
+			Object? _value = null;
+			if (_property != null && _instanceobject != null)
+			{
+				try {
+					_value = _property?.GetValue(_instanceobject, null);
+				}
+				catch (Exception _exception) {
+					throw new Exception("EXCEPTION: " + _exception.Message);
+				}
+			}
+			return _value;
+		}
+
+		private void _inputmoduleconfiguration()
+		{
+			// TODO: Have code here
+		}
+
+		public void _createmodulemanually()
+		{
+			// TODO: Make modules manually
+		}
+
+		private void _outputpropertyculturalbehaviour(PropertyInfo? _property)
+		{
+			if (_property != null)
+			{
+				// TODO: Might add more details on Property Culture
+			}
+		}
+
+		#endregion
+
+		#region Miscellaneous Functions
 
 		public void _miscfunction1()
 		{
-			Console.WriteLine("[ List of available types of properties: ]");
-			Console.WriteLine("int : " + typeof(int).Name);
-			Console.WriteLine("float : " + typeof(float).Name);
-			Console.WriteLine("double : " + typeof(double).Name);
-			Console.WriteLine("char : " + typeof(char).Name);
-			Console.WriteLine("bool : " + typeof(bool).Name);
-			Console.WriteLine("string : " + typeof(string).Name);
-			Console.WriteLine("Int16 : " + typeof(Int16).Name);
-			Console.WriteLine("Int32 : " + typeof(Int32).Name);
-			Console.WriteLine("Int64 : " + typeof(Int64).Name);
-			Console.WriteLine("String : " + typeof(String).Name);
+			string _message = Environment.NewLine;
+			_message += "[ List of available types of properties: ]" + Environment.NewLine;
+			_message += "int : " + typeof(int).Name + Environment.NewLine;
+			_message += "float : " + typeof(float).Name + Environment.NewLine;
+			_message += "double : " + typeof(double).Name + Environment.NewLine;
+			_message += "char : " + typeof(char).Name + Environment.NewLine;
+			_message += "bool : " + typeof(bool).Name + Environment.NewLine;
+			_message += "string : " + typeof(string).Name + Environment.NewLine;
+			_message += "Int16 : " + typeof(Int16).Name + Environment.NewLine;
+			_message += "Int32 : " + typeof(Int32).Name + Environment.NewLine;
+			_message += "Int64 : " + typeof(Int64).Name + Environment.NewLine;
+			_message += "String : " + typeof(String).Name;
+			Console.Write(_message);
 		}
 
 		public void _miscfunction2()
 		{
+			Console.Write(Environment.NewLine);
 			DateTime _datetime = DateTime.Now;
 			Console.WriteLine("The time: {0:d} at {0:T}", _datetime);
 			TimeZoneInfo _timezone = TimeZoneInfo.Local;
-			Console.WriteLine("The time zone: {0}", _timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
+			Console.Write("The time zone: {0}", _timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
 		}
+	
+		#endregion
+
+		#endregion
 	}
 }
