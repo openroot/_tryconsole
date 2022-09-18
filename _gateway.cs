@@ -31,8 +31,24 @@ namespace _tryconsole
 		{
 			// loop through 'primary menu'
 			ConsoleKeyInfo _maydayprimarymenu = new ConsoleKeyInfo();
+			bool _isonceenteredprimarymenumenu = false;
+
 			while (true)
 			{
+				// show menu at top
+				if (!_isonceenteredprimarymenumenu)
+				{
+					// show the 'primary menu'
+					this._showprimarymenu(true);
+					_maydayprimarymenu = this._improviseamayday(true);
+				}
+				else
+				{
+					// show the 'primary menu', but don't take keyboard input
+					this._showprimarymenu(true);
+					_maydayprimarymenu = this._improviseamayday(true, _maydayprimarymenu);
+				}
+
 				switch (_maydayprimarymenu.Key)
 				{
 					// clear the Console screen
@@ -44,6 +60,7 @@ namespace _tryconsole
 					case ConsoleKey.F:						
 						ConsoleKeyInfo _maydayfunctionmenu = new ConsoleKeyInfo();
 						bool _isonceenteredalreadyfunctionmenu = false;
+
 						while (true)
 						{
 							// show menu at top
@@ -66,6 +83,7 @@ namespace _tryconsole
 								case ConsoleKey.A:
 									ConsoleKeyInfo _maydaymoduleoperationmenu = new ConsoleKeyInfo();
 									bool _isonceenteredalreadymoduleopeartionmenu = false;
+
 									while (true)
 									{
 										// show menu at top
@@ -110,6 +128,7 @@ namespace _tryconsole
 												this._showfunctiondivider();
 												break;
 											default:
+												this._showwrongmayday();
 												break;
 										}
 
@@ -131,15 +150,16 @@ namespace _tryconsole
 									break;
 								case ConsoleKey.B:
 									this._showfunctiondivider(true);
-									this._miscfunction1();
+									this._currentdatetimefunction();
 									this._showfunctiondivider();
 									break;
 								case ConsoleKey.C:
 									this._showfunctiondivider(true);
-									this._miscfunction2();
+									this._miscfunction1();
 									this._showfunctiondivider();
 									break;
 								default:
+									this._showwrongmayday();
 									break;
 							}
 
@@ -160,29 +180,40 @@ namespace _tryconsole
 						}
 						break;
 					default:
+						this._showwrongmayday();
 						break;
 				}
 
-				// show menu at top
-				// show the 'primary menu'
-				this._showprimarymenu();
-				_maydayprimarymenu = this._improviseamayday(true);
-				if (_maydayprimarymenu.Key == ConsoleKey.Escape) { 
+				if (_maydayprimarymenu.Key == ConsoleKey.Escape)
+				{
+					Console.Clear();
 					break;
+				}
+				else
+				{
+					// show menu at bottom
+					// show the 'primary menu'
+					this._showprimarymenu(false);
+					_maydayprimarymenu = this._improviseamayday(true);
+
+					_isonceenteredprimarymenumenu = true;
 				}
 			}
 		}
 
-		private void _showprimarymenu()
+		private void _showprimarymenu(bool _iscreatefreshmenu)
 		{
-			Console.Clear();
+			// TODO: update menu string into List<>
+			if (_iscreatefreshmenu) {
+				Console.Clear();
+			}
 			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkRed);
-			string _message = Environment.NewLine + Environment.NewLine;
-			_message += "[ MENU ]******************************************" + Environment.NewLine;
+			string _message = string.Empty;
+			_message += "[ MENU ]****************************************************" + Environment.NewLine;
 			_message += "1. Press < ESC > for Exit App." + Environment.NewLine;
 			_message += "2. Press < C > for Clearing Screen." + Environment.NewLine;
-			_message += "3. Press < F > for Opening Function Menu." + Environment.NewLine;
-			_message += "**************************************************";
+			_message += "3. Press < F > for Opening Function Menu **(sub-menu)" + Environment.NewLine;
+			_message += "************************************************************";
 			Console.Write(_message);
 		}
 
@@ -192,12 +223,12 @@ namespace _tryconsole
 				Console.Clear();
 			}
 			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.Red);
-			string _message = Environment.NewLine + Environment.NewLine;
-			_message += "[ FUNCTION MENU ]*********************************" + Environment.NewLine;
-			_message += "1. Press < A > for Module Creation & Operations." + Environment.NewLine;
-			_message += "2. Press < B > for Misc Function 1." + Environment.NewLine;
-			_message += "3. Press < C > for Misc Function 2." + Environment.NewLine;
-			_message += "**************************************************";
+			string _message = string.Empty;
+			_message += "[ FUNCTION MENU ]*******************************************" + Environment.NewLine;
+			_message += "1. Press < A > for Module Creation & Operations **(sub-menu)" + Environment.NewLine;
+			_message += "2. Press < B > for Current DateTime Function." + Environment.NewLine;
+			_message += "3. Press < C > for Misc Function 1." + Environment.NewLine;
+			_message += "************************************************************";
 			Console.Write(_message);
 		}
 
@@ -207,14 +238,14 @@ namespace _tryconsole
 				Console.Clear();
 			}
 			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.Red);
-			string _message = Environment.NewLine + Environment.NewLine;
-			_message += "[ MODULE MENU ]***********************************" + Environment.NewLine;
+			string _message = string.Empty;
+			_message += "[ MODULE MENU ]******************************************************************" + Environment.NewLine;
 			_message += "1. Press < S > for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
 			_message += "2. Press < C > for Output Cultural Behavior for All Module Instances (properties)" + Environment.NewLine;
 			_message += "3. Press < O > for Output All Module Instances (properties)" + Environment.NewLine;
 			_message += "4. Press < M > for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
 			_message += "5. Press < I > for New Input for All Module Instances (properties)" + Environment.NewLine;
-			_message += "**************************************************";
+			_message += "*********************************************************************************";
 			Console.Write(_message);
 		}
 
@@ -223,38 +254,47 @@ namespace _tryconsole
 			ConsoleKeyInfo _mayday = new ConsoleKeyInfo();
 
 			string _message = string.Empty;
-			_message = !_isprimarymenu ? Environment.NewLine + "Press < ESC > for get back to Previous Menu." : string.Empty;
+			if (!_isprimarymenu)
+			{
+				_message += Environment.NewLine + "Press < ESC > for get back to Previous Menu.";
+				_message += Environment.NewLine + "********************************************";
+			}
 			Console.Write(_message);
 
-			if (_maydayexistingifany == default(ConsoleKeyInfo)) {
-				_mayday = Console.ReadKey(true);
-			}
-			else {
-				_mayday = _maydayexistingifany;
-			}
-			
+			// read keyboard input only when key any existance not passed
+			_mayday = _maydayexistingifany == default(ConsoleKeyInfo) ? Console.ReadKey(true) : _maydayexistingifany;
+		
 			_message = Environment.NewLine + Environment.NewLine + "\\\\\\ OPTION SELECTED \\\\\\ < " + _mayday.Key.ToString() + " >";
 			Console.Write(_message);
 			
 			return _mayday;
 		}
 
-		private void _consolecolorchanger(ConsoleColor _foreground , [Optional]ConsoleColor _background)
-		{
-			// Console.ForegroundColor = _foreground;
-			// Console.BackgroundColor = _background;
-		}
-
-		private void _showfunctiondivider([Optional]bool _istopone)
+		private void _showfunctiondivider([Optional]bool _istopdivider)
 		{
 			string _message = string.Empty;
-			_message += _istopone ? Environment.NewLine + Environment.NewLine : Environment.NewLine;
+			_message += _istopdivider ? Environment.NewLine + Environment.NewLine : Environment.NewLine;
 			_message += "==================================================";
+			_message += !_istopdivider ? Environment.NewLine + Environment.NewLine : string.Empty;
 			Console.Write(_message);
-			if (_istopone) {
+			if (_istopdivider) {
 				//Console.Clear();
 				this._consolecolorchanger(ConsoleColor.Black, ConsoleColor.Yellow);		
 			}
+		}
+
+		private void _showwrongmayday()
+		{
+			string _message = string.Empty;
+			_message += " (!alert) Wrong Input!" + Environment.NewLine + Environment.NewLine;
+			Console.Write(_message);
+		}
+
+		private void _consolecolorchanger(ConsoleColor _foreground , [Optional]ConsoleColor _background)
+		{
+			// TODO: look for the color case here
+			// Console.ForegroundColor = _foreground;
+			// Console.BackgroundColor = _background;
 		}
 
 		#endregion
@@ -296,7 +336,7 @@ namespace _tryconsole
 					// module type
 					Type? _module = _modulecontainer.Value[0].GetType();
 
-					_message += _modulecount > 0 ? Environment.NewLine : String.Empty;
+					_message += _modulecount > 0 ? Environment.NewLine : string.Empty;
 
 					// output module order number
 					_message += Environment.NewLine + "--(**module (" + ++_modulecount + ".))" + Environment.NewLine;
@@ -340,7 +380,7 @@ namespace _tryconsole
 				
 				Type _instance = _instanceobject.GetType();
 
-				string _message = String.Empty;
+				string _message = string.Empty;
 
 				// output START
 				// add indent to START only if instance level is first
@@ -364,7 +404,7 @@ namespace _tryconsole
 				// loop through each property of instance (if any)
 				foreach (PropertyInfo _property in _instance.GetProperties())
 				{
-					_message = String.Empty;
+					_message = string.Empty;
 
 					// get if property is system default type
 					bool _ispropertysystemdefaulttype = _propertyconfiguration._ispropertysystemdefaulttype(_property.PropertyType);
@@ -532,6 +572,15 @@ namespace _tryconsole
 
 		#region Miscellaneous Functions
 
+		public void _currentdatetimefunction()
+		{
+			Console.Write(Environment.NewLine);
+			DateTime _datetime = DateTime.Now;
+			Console.WriteLine("The time: {0:d} at {0:T}", _datetime);
+			TimeZoneInfo _timezone = TimeZoneInfo.Local;
+			Console.Write("The time zone: {0}", _timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
+		}
+
 		public void _miscfunction1()
 		{
 			string _message = Environment.NewLine;
@@ -547,15 +596,6 @@ namespace _tryconsole
 			_message += "Int64 : " + typeof(Int64).Name + Environment.NewLine;
 			_message += "String : " + typeof(String).Name;
 			Console.Write(_message);
-		}
-
-		public void _miscfunction2()
-		{
-			Console.Write(Environment.NewLine);
-			DateTime _datetime = DateTime.Now;
-			Console.WriteLine("The time: {0:d} at {0:T}", _datetime);
-			TimeZoneInfo _timezone = TimeZoneInfo.Local;
-			Console.Write("The time zone: {0}", _timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
 		}
 	
 		#endregion
