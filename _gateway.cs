@@ -163,10 +163,13 @@ namespace _tryconsole
 						break;
 				}
 
+				// show menu at top
 				// show the 'primary menu'
 				this._showprimarymenu();
 				_maydayprimarymenu = this._improviseamayday(true);
-				if (_maydayprimarymenu.Key == ConsoleKey.Escape) { break; }
+				if (_maydayprimarymenu.Key == ConsoleKey.Escape) { 
+					break;
+				}
 			}
 		}
 
