@@ -283,6 +283,7 @@ namespace _tryconsole
 
 		private void _showfunctiondivider([Optional]bool _istopdivider)
 		{
+			// TODO: set arrangement for color considerations for functionalities here
 			//this._consolecolorchanger(ConsoleColor.White, ConsoleColor.Magenta);	
 			string _message = string.Empty;
 			_message += _istopdivider ? Environment.NewLine + Environment.NewLine : Environment.NewLine;
