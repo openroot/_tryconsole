@@ -329,6 +329,7 @@ namespace _tryconsole
 		{
 			Console.WriteLine("TryConsole App Thread --ID " + Thread.CurrentThread.ManagedThreadId);
 		}
+		
 		private void _consolecolorchanger(ConsoleColor _foreground , [Optional]ConsoleColor _background)
 		{
 			Console.ForegroundColor = _foreground;
