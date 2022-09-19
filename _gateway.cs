@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace _tryconsole
 {
@@ -11,18 +14,32 @@ namespace _tryconsole
 
 		public _gateway() {}
 
-		public static int Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			_gateway _gateway = new _gateway();
+			
+			CancellationTokenSource _cancellationtokensource = new CancellationTokenSource();
+      		CancellationToken _cancellationtoken = _cancellationtokensource.Token;
+			Task _executeprimarymenutask = Task.Run(() => _gateway._executeprimarymenu(), _cancellationtoken);
+      		_executeprimarymenutask.Wait();
+			await Task.Yield();
+			_cancellationtokensource.Cancel();
 
 			try {
-				_gateway._executeprimarymenu();
+				await _executeprimarymenutask;
 			}
-			catch (Exception _exception) {
-				Console.WriteLine("ERROR: " + _exception.Message);
-			}
+			catch (AggregateException _exception)
+			{
+				Console.WriteLine("Exception messages: ");
+				foreach (Exception _innerexception in _exception.InnerExceptions) {
+					Console.WriteLine("   {0}: {1}", _innerexception.GetType().Name, _innerexception.Message);
+				}
 
-			return 0;
+				Console.WriteLine(Environment.NewLine + "Task status: {0}", _executeprimarymenutask.Status);       
+			}
+			finally {
+				_cancellationtokensource.Dispose();
+			}
 		}
 
 		#region TryConsole App Menu Section
@@ -218,6 +235,8 @@ namespace _tryconsole
 			if (_iscreatefreshmenu) {
 				Console.Clear();
 			}
+			
+			this._showappthreaddata();
 			string _message = string.Empty;
 			_message += "[ MENU ]****************************************************" + Environment.NewLine;
 			_message += "1. Press < ESC > for Exit App." + Environment.NewLine;
@@ -233,6 +252,8 @@ namespace _tryconsole
 			if (_iscreatefreshmenu) {
 				Console.Clear();
 			}
+			
+			this._showappthreaddata();
 			string _message = string.Empty;
 			_message += "[ FUNCTION MENU ]*******************************************" + Environment.NewLine;
 			_message += "1. Press < A > for Module Creation & Operations **(sub-menu)" + Environment.NewLine;
@@ -249,6 +270,8 @@ namespace _tryconsole
 			if (_iscreatefreshmenu) {
 				Console.Clear();
 			}
+
+			this._showappthreaddata();
 			string _message = string.Empty;
 			_message += "[ MODULE MENU ]******************************************************************" + Environment.NewLine;
 			_message += "1. Press < S > for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
@@ -302,6 +325,10 @@ namespace _tryconsole
 			Console.Write(_message);
 		}
 
+		private void _showappthreaddata()
+		{
+			Console.WriteLine("TryConsole App Thread --ID " + Thread.CurrentThread.ManagedThreadId);
+		}
 		private void _consolecolorchanger(ConsoleColor _foreground , [Optional]ConsoleColor _background)
 		{
 			Console.ForegroundColor = _foreground;
