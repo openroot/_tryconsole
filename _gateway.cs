@@ -206,6 +206,11 @@ namespace _tryconsole
 			}
 		}
 
+		private void _showamenu()
+		{
+
+		}
+
 		private void _showprimarymenu(bool _iscreatefreshmenu)
 		{
 			// TODO: update menu string into List<>
