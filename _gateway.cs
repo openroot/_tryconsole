@@ -29,10 +29,10 @@ namespace _tryconsole
 
 		private void _executeprimarymenu()
 		{
-			// loop through 'primary menu'
 			ConsoleKeyInfo _maydayprimarymenu = new ConsoleKeyInfo();
 			bool _isonceenteredprimarymenumenu = false;
 
+			// loop through 'primary menu'
 			while (true)
 			{
 				// show menu at top
@@ -56,11 +56,11 @@ namespace _tryconsole
 						Console.Clear();
 						break;
 					
-					// loop through 'function menu'
 					case ConsoleKey.F:						
 						ConsoleKeyInfo _maydayfunctionmenu = new ConsoleKeyInfo();
 						bool _isonceenteredalreadyfunctionmenu = false;
 
+						// loop through 'function menu'
 						while (true)
 						{
 							// show menu at top
@@ -79,11 +79,11 @@ namespace _tryconsole
 
 							switch (_maydayfunctionmenu.Key)
 							{
-								// loop through 'module operation menu'
 								case ConsoleKey.A:
 									ConsoleKeyInfo _maydaymoduleoperationmenu = new ConsoleKeyInfo();
 									bool _isonceenteredalreadymoduleopeartionmenu = false;
 
+									// loop through 'module operation menu'
 									while (true)
 									{
 										// show menu at top
@@ -158,6 +158,11 @@ namespace _tryconsole
 									this._miscfunction1();
 									this._showfunctiondivider();
 									break;
+								case ConsoleKey.D:
+									this._showfunctiondivider(true);
+									this._miscfunction2();
+									this._showfunctiondivider();
+									break;
 								default:
 									this._showwrongmayday();
 									break;
@@ -228,6 +233,7 @@ namespace _tryconsole
 			_message += "1. Press < A > for Module Creation & Operations **(sub-menu)" + Environment.NewLine;
 			_message += "2. Press < B > for Current DateTime Function." + Environment.NewLine;
 			_message += "3. Press < C > for Misc Function 1." + Environment.NewLine;
+			_message += "4. Press < D > for Misc Function 2." + Environment.NewLine;
 			_message += "************************************************************";
 			Console.Write(_message);
 		}
@@ -595,6 +601,29 @@ namespace _tryconsole
 			_message += "Int64 : " + typeof(Int64).Name + Environment.NewLine;
 			_message += "String : " + typeof(String).Name;
 			Console.Write(_message);
+		}
+
+		public void _miscfunction2()
+		{
+			// TODO: update menu string into List<>
+			// this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkMagenta);
+			// if (_iscreatefreshmenu) {
+			// 	Console.Clear();
+			// }
+
+
+			string _message = string.Empty;
+			_message += "[ MODULE MENU ]******************************************************************" + Environment.NewLine;
+			_message += "1. Press < S > for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
+			_message += "2. Press < C > for Output Cultural Behavior for All Module Instances (properties)" + Environment.NewLine;
+			_message += "3. Press < O > for Output All Module Instances (properties)" + Environment.NewLine;
+			_message += "4. Press < M > for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
+			_message += "5. Press < I > for New Input for All Module Instances (properties)" + Environment.NewLine;
+			_message += "*********************************************************************************";
+
+			Dictionary<string, List<KeyValuePair<string, string>>> _menubase = new Dictionary<string, List<KeyValuePair<string, string>>>();
+			
+			Console.Write(Environment.NewLine + Environment.NewLine + "^^Formatting Menu" + Environment.NewLine + Environment.NewLine +_message);
 		}
 	
 		#endregion
