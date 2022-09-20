@@ -639,14 +639,8 @@ namespace _tryconsole
 
 		public void _miscfunction2()
 		{
-			// TODO: update menu string into List<>
-			// this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkMagenta);
-			// if (_iscreatefreshmenu) {
-			// 	Console.Clear();
-			// }
-
-
 			string _message = string.Empty;
+			_message += "[ Format For a Sample Menu ]" + Environment.NewLine;
 			_message += "[ MODULE MENU ]******************************************************************" + Environment.NewLine;
 			_message += "1. Press < S > for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
 			_message += "2. Press < C > for Output Cultural Behavior for All Module Instances (properties)" + Environment.NewLine;
@@ -656,7 +650,7 @@ namespace _tryconsole
 			_message += "*********************************************************************************";
 
 
-			Console.Write(Environment.NewLine + Environment.NewLine + "^^Formatting Menu" + Environment.NewLine + Environment.NewLine +_message);
+			Console.Write(Environment.NewLine + Environment.NewLine + _message + Environment.NewLine);
 		}
 
 		#endregion
