@@ -648,8 +648,6 @@ namespace _tryconsole
 			_message += "4. Press < M > for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
 			_message += "5. Press < I > for New Input for All Module Instances (properties)" + Environment.NewLine;
 			_message += "*********************************************************************************";
-
-
 			Console.Write(Environment.NewLine + Environment.NewLine + _message + Environment.NewLine);
 		}
 
