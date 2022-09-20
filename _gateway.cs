@@ -18,23 +18,22 @@ namespace _tryconsole
 		{
 			_gateway _gateway = new _gateway();
 			
+			// Create a task runner for execute app menu
 			CancellationTokenSource _cancellationtokensource = new CancellationTokenSource();
 			CancellationToken _cancellationtoken = _cancellationtokensource.Token;
 			Task _executeprimarymenutask = Task.Run(() => _gateway._executeprimarymenu(), _cancellationtoken);
 			_executeprimarymenutask.Wait();
 			await Task.Yield();
 			_cancellationtokensource.Cancel();
-
 			try {
 				await _executeprimarymenutask;
 			}
 			catch (AggregateException _exception)
 			{
-				Console.WriteLine("Exception messages: ");
+				Console.WriteLine("Exception(s):");
 				foreach (Exception _innerexception in _exception.InnerExceptions) {
-					Console.WriteLine("   {0}: {1}", _innerexception.GetType().Name, _innerexception.Message);
+					Console.WriteLine("\t{0}:\t{1}", _innerexception.GetType().Name, _innerexception.Message);
 				}
-
 				Console.WriteLine(Environment.NewLine + "Task status: {0}", _executeprimarymenutask.Status);       
 			}
 			finally {
