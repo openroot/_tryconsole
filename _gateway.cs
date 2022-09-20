@@ -46,77 +46,56 @@ namespace _tryconsole
 
 		private void _executeprimarymenu()
 		{
+			// new menu
 			ConsoleKeyInfo _maydayprimarymenu = new ConsoleKeyInfo();
 			bool _isonceenteredprimarymenumenu = false;
 
-			// loop through 'primary menu'
+			// loop through menu
 			while (true)
 			{
-				// show menu at top
-				if (!_isonceenteredprimarymenumenu)
-				{
-					// show the 'primary menu'
-					this._showprimarymenu(true);
-					_maydayprimarymenu = this._improviseamayday(true);
-				}
-				else
-				{
-					// show the 'primary menu', but don't take keyboard input
-					this._showprimarymenu(true);
-					_maydayprimarymenu = this._improviseamayday(true, _maydayprimarymenu);
-				}
-
+				// show menu at top placing
+				this._showamenu("menu", true, ConsoleColor.White, ConsoleColor.DarkMagenta);
+				// take keyboard input for the top placing menu ,only when menu is showing for the first time in same iteration
+				_maydayprimarymenu = !_isonceenteredprimarymenumenu ?
+					this._improviseamayday() : this._improviseamayday(_maydayprimarymenu);
+				
 				switch (_maydayprimarymenu.Key)
 				{
-					// clear the Console screen
 					case ConsoleKey.C:
+						// clear the Console screen
 						Console.Clear();
 						break;
 					
-					case ConsoleKey.F:						
+					case ConsoleKey.F:
+						// new menu				
 						ConsoleKeyInfo _maydayfunctionmenu = new ConsoleKeyInfo();
 						bool _isonceenteredalreadyfunctionmenu = false;
 
-						// loop through 'function menu'
+						// loop through menu
 						while (true)
 						{
-							// show menu at top
-							if (!_isonceenteredalreadyfunctionmenu)
-							{
-								// show the 'function menu'
-								this._showfunctionmenu(true);
-								_maydayfunctionmenu = this._improviseamayday(false);
-							}
-							else
-							{
-								// show the 'function menu', but don't take keyboard input
-								this._showfunctionmenu(true);
-								_maydayfunctionmenu = this._improviseamayday(false, _maydayfunctionmenu);
-							}
-
+							// show menu at top placing
+							this._showamenu("function menu", true, ConsoleColor.White, ConsoleColor.DarkCyan);
+							// take keyboard input for the top placing menu ,only when menu is showing for the first time in same iteration
+							_maydayfunctionmenu = !_isonceenteredalreadyfunctionmenu ?
+								this._improviseamayday() : this._improviseamayday(_maydayfunctionmenu);
+				
 							switch (_maydayfunctionmenu.Key)
 							{
 								case ConsoleKey.A:
+									// new menu
 									ConsoleKeyInfo _maydaymoduleoperationmenu = new ConsoleKeyInfo();
 									bool _isonceenteredalreadymoduleopeartionmenu = false;
 
-									// loop through 'module operation menu'
+									// loop through menu
 									while (true)
 									{
-										// show menu at top
-										if (!_isonceenteredalreadymoduleopeartionmenu)
-										{
-											// show the 'module operation menu'
-											this._showmoduleoperationmenu(true);
-											_maydaymoduleoperationmenu = this._improviseamayday(false);
-										}
-										else
-										{
-											// show the 'module operation menu', but don't take keyboard input
-											this._showmoduleoperationmenu(true);
-											_maydaymoduleoperationmenu = this._improviseamayday(false, _maydaymoduleoperationmenu);
-										}
-
+										// show menu at top placing
+										this._showamenu("module menu", true, ConsoleColor.White, ConsoleColor.DarkCyan);
+										// take keyboard input for the top placing menu ,only when menu is showing for the first time in same iteration
+										_maydaymoduleoperationmenu = !_isonceenteredalreadymoduleopeartionmenu ?
+											this._improviseamayday() : this._improviseamayday(_maydaymoduleoperationmenu);
+				
 										switch (_maydaymoduleoperationmenu.Key)
 										{
 											case ConsoleKey.S:
@@ -149,6 +128,7 @@ namespace _tryconsole
 												break;
 										}
 
+										// break the loop
 										if (_maydaymoduleoperationmenu.Key == ConsoleKey.Escape)
 										{
 											Console.Clear();
@@ -156,10 +136,10 @@ namespace _tryconsole
 										}
 										else
 										{
-											// show menu at bottom
-											// show the 'module operation menu'
-											this._showmoduleoperationmenu(false);
-											_maydaymoduleoperationmenu = this._improviseamayday(false);
+											// show menu at bottom placing
+											this._showamenu("module menu", false, ConsoleColor.White, ConsoleColor.DarkCyan);
+											// take keyboard input for the bottom placing menu
+											_maydaymoduleoperationmenu = this._improviseamayday();
 
 											_isonceenteredalreadymoduleopeartionmenu = true;
 										}
@@ -185,6 +165,7 @@ namespace _tryconsole
 									break;
 							}
 
+							// break the loop
 							if (_maydayfunctionmenu.Key == ConsoleKey.Escape)
 							{
 								Console.Clear();
@@ -192,10 +173,10 @@ namespace _tryconsole
 							}
 							else
 							{
-								// show menu at bottom
-								// show the 'function menu'
-								this._showfunctionmenu(false);
-								_maydayfunctionmenu = this._improviseamayday(false);
+								// show menu at bottom placing
+								this._showamenu("function menu", false, ConsoleColor.White, ConsoleColor.DarkCyan);
+								// take keyboard input for the bottom placing menu
+								_maydayfunctionmenu = this._improviseamayday();
 
 								_isonceenteredalreadyfunctionmenu = true;
 							}
@@ -206,6 +187,7 @@ namespace _tryconsole
 						break;
 				}
 
+				// break the loop
 				if (_maydayprimarymenu.Key == ConsoleKey.Escape)
 				{
 					Console.Clear();
@@ -213,86 +195,96 @@ namespace _tryconsole
 				}
 				else
 				{
-					// show menu at bottom
-					// show the 'primary menu'
-					this._showprimarymenu(false);
-					_maydayprimarymenu = this._improviseamayday(true);
+					// show menu at bottom placing
+					this._showamenu("menu", false, ConsoleColor.White, ConsoleColor.DarkMagenta);
+					// take keyboard input for the bottom placing menu
+					_maydayprimarymenu = this._improviseamayday();
 
 					_isonceenteredprimarymenumenu = true;
 				}
 			}
 		}
 
-		private void _showamenu()
+		private Dictionary<string, List<KeyValuePair<string, string>>> _getmenubase()
 		{
+			Dictionary<string, List<KeyValuePair<string, string>>> _menubase = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
+			_menubase.Add("menu" , new List<KeyValuePair<string, string>>() {
+				new KeyValuePair<string, string>("esc", "for Exit App"),
+				new KeyValuePair<string, string>("c", "for Clearing Screen"),
+				new KeyValuePair<string, string>("f", "for Opening Function Menu **(sub-menu)")
+			});
+			_menubase.Add("function menu" , new List<KeyValuePair<string, string>>() {
+				new KeyValuePair<string, string>("a", "for Module Creation & Operations **(sub-menu)"),
+				new KeyValuePair<string, string>("b", "for Current DateTime Function."),
+				new KeyValuePair<string, string>("c", "for Misc Function 1."),
+				new KeyValuePair<string, string>("d", "for Misc Function 2.")
+			});
+			_menubase.Add("module menu" , new List<KeyValuePair<string, string>>() {
+				new KeyValuePair<string, string>("s", "for Creating a Sample Module & It's Instance Prefilled"),
+				new KeyValuePair<string, string>("c", "for Output Cultural Behavior for All Module Instances (properties)"),
+				new KeyValuePair<string, string>("o", "for Output All Module Instances (properties)"),
+				new KeyValuePair<string, string>("m", "for Creating Manual Module & It's Instance(s)"),
+				new KeyValuePair<string, string>("i", "for New Input for All Module Instances (properties)")
+			});
+
+			return _menubase;
 		}
 
-		private void _showprimarymenu(bool _iscreatefreshmenu)
+		private void _showamenu(string _menukey, bool _iscreatefreshmenu, ConsoleColor _consoleforeground, ConsoleColor _consolebackground)
 		{
-			// TODO: update menu string into List<>
-			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkMagenta);
+			this._changeconsolecolor(_consoleforeground, _consolebackground);
 			if (_iscreatefreshmenu) {
 				Console.Clear();
 			}
 			
 			this._showappthreaddata();
-			string _message = string.Empty;
-			_message += "[ MENU ]****************************************************" + Environment.NewLine;
-			_message += "1. Press < ESC > for Exit App." + Environment.NewLine;
-			_message += "2. Press < C > for Clearing Screen." + Environment.NewLine;
-			_message += "3. Press < F > for Opening Function Menu **(sub-menu)" + Environment.NewLine;
-			_message += "************************************************************";
-			Console.Write(_message);
-		}
 
-		private void _showfunctionmenu(bool _iscreatefreshmenu)
-		{
-			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkCyan);
-			if (_iscreatefreshmenu) {
-				Console.Clear();
+			Dictionary<string, List<KeyValuePair<string, string>>> _menubase = this._getmenubase();
+			if (_menubase != null)
+			{
+				foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup in _menubase)
+				{
+					if (_menugroup.Key.Equals(_menukey)) {
+						// output formatted string of provided menu group
+						Console.Write(this._getformattedmenugroupstring(_menugroup));
+					}
+				}
 			}
-			
-			this._showappthreaddata();
-			string _message = string.Empty;
-			_message += "[ FUNCTION MENU ]*******************************************" + Environment.NewLine;
-			_message += "1. Press < A > for Module Creation & Operations **(sub-menu)" + Environment.NewLine;
-			_message += "2. Press < B > for Current DateTime Function." + Environment.NewLine;
-			_message += "3. Press < C > for Misc Function 1." + Environment.NewLine;
-			_message += "4. Press < D > for Misc Function 2." + Environment.NewLine;
-			_message += "************************************************************";
-			Console.Write(_message);
 		}
 
-		private void _showmoduleoperationmenu( bool _iscreatefreshmenu)
+		private string _getformattedmenugroupstring(KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup)
 		{
-			this._consolecolorchanger(ConsoleColor.White, ConsoleColor.DarkCyan);
-			if (_iscreatefreshmenu) {
-				Console.Clear();
-			}
+			// formatted string of a menu group
+			string _formattedmenugroup = string.Empty;
 
-			this._showappthreaddata();
-			string _message = string.Empty;
-			_message += "[ MODULE MENU ]******************************************************************" + Environment.NewLine;
-			_message += "1. Press < S > for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
-			_message += "2. Press < C > for Output Cultural Behavior for All Module Instances (properties)" + Environment.NewLine;
-			_message += "3. Press < O > for Output All Module Instances (properties)" + Environment.NewLine;
-			_message += "4. Press < M > for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
-			_message += "5. Press < I > for New Input for All Module Instances (properties)" + Environment.NewLine;
-			_message += "*********************************************************************************";
-			Console.Write(_message);
+			char[] _menuseparatorcharacter = { '[', ']', '*' };
+			int _count = 0, _maxlengthofmenudescription = 0;
+
+			foreach (KeyValuePair<string, string> _menu in _menugroup.Value)
+			{
+				string _formattedmenuline = ++_count + ". Press < " + _menu.Key.ToUpper() + " > " + _menu.Value + Environment.NewLine;
+				_formattedmenugroup += _formattedmenuline;
+				_maxlengthofmenudescription = _maxlengthofmenudescription < _formattedmenuline.Length ? _formattedmenuline.Length : _maxlengthofmenudescription;
+			}
+			--_maxlengthofmenudescription;
+
+			_formattedmenugroup = _menuseparatorcharacter[0] + " " + _menugroup.Key.ToUpper() + " " + _menuseparatorcharacter[1]
+				+ new String(_menuseparatorcharacter[2], _maxlengthofmenudescription - _menugroup.Key.Length - 4)
+				+ Environment.NewLine + _formattedmenugroup;
+			_formattedmenugroup += new String(_menuseparatorcharacter[2], _maxlengthofmenudescription);
+
+			return _formattedmenugroup;
 		}
 
-		private ConsoleKeyInfo _improviseamayday(bool _isprimarymenu, [Optional]ConsoleKeyInfo _maydayexistingifany)
+		private ConsoleKeyInfo _improviseamayday([Optional]ConsoleKeyInfo _maydayexistingifany)
 		{
 			ConsoleKeyInfo _mayday = new ConsoleKeyInfo();
 
 			string _message = string.Empty;
-			if (!_isprimarymenu)
-			{
-				_message += Environment.NewLine + "Press < ESC > for get back to Previous Menu.";
-				_message += Environment.NewLine + "********************************************";
-			}
+
+			_message += Environment.NewLine + "Press < ESC > for get back to Previous Menu.";
+			_message += Environment.NewLine + "********************************************";
 			Console.Write(_message);
 
 			// read keyboard input only when key any existance not passed
@@ -330,10 +322,10 @@ namespace _tryconsole
 			Console.WriteLine("TryConsole App Thread --ID " + Thread.CurrentThread.ManagedThreadId);
 		}
 		
-		private void _consolecolorchanger(ConsoleColor _foreground , [Optional]ConsoleColor _background)
+		private void _changeconsolecolor(ConsoleColor _consoleforeground , ConsoleColor _consolebackground)
 		{
-			Console.ForegroundColor = _foreground;
-			Console.BackgroundColor = _background;
+			Console.ForegroundColor = _consoleforeground;
+			Console.BackgroundColor = _consolebackground;
 		}
 
 		#endregion
@@ -611,6 +603,15 @@ namespace _tryconsole
 
 		#region Miscellaneous Functions
 
+		public void _showappabout()
+		{
+			string _message = string.Empty;
+
+			// TODO: prepare the app about
+
+			Console.Write(_message);
+		}
+
 		public void _currentdatetimefunction()
 		{
 			Console.Write(Environment.NewLine);
@@ -655,11 +656,10 @@ namespace _tryconsole
 			_message += "5. Press < I > for New Input for All Module Instances (properties)" + Environment.NewLine;
 			_message += "*********************************************************************************";
 
-			Dictionary<string, List<KeyValuePair<string, string>>> _menubase = new Dictionary<string, List<KeyValuePair<string, string>>>();
-			
+
 			Console.Write(Environment.NewLine + Environment.NewLine + "^^Formatting Menu" + Environment.NewLine + Environment.NewLine +_message);
 		}
-	
+
 		#endregion
 
 		#endregion
