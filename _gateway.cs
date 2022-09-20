@@ -94,7 +94,7 @@ namespace _tryconsole
 										// take keyboard input for the top placing menu ,only when menu is showing for the first time in same iteration
 										_maydaymoduleoperationmenu = !_isonceenteredalreadymoduleopeartionmenu ?
 											this._improviseamayday() : this._improviseamayday(_maydaymoduleoperationmenu);
-				
+
 										switch (_maydaymoduleoperationmenu.Key)
 										{
 											case ConsoleKey.S:
@@ -181,6 +181,12 @@ namespace _tryconsole
 							}
 						}
 						break;
+					case ConsoleKey.A:
+						this._showfunctiondivider(true);
+						Action _showappaboutaction = new Action(this._showappabout);
+						_showappaboutaction();
+						this._showfunctiondivider();
+						break;
 					default:
 						this._showwrongmayday();
 						break;
@@ -227,17 +233,22 @@ namespace _tryconsole
 				new KeyValuePair<string, string>("i", "for New Input for All Module Instances (properties)")
 			});
 
+			foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup in _menubase)
+			{
+				_menugroup.Value.Add(new KeyValuePair<string, string>("separator", "------------------------------") {});
+				_menugroup.Value.Add(new KeyValuePair<string, string>("esc", "for get back to Previous Menu.") {});
+				_menugroup.Value.Add(new KeyValuePair<string, string>("a", "About") {});
+			}
+
 			return _menubase;
 		}
 
 		private void _showamenu(string _menukey, bool _iscreatefreshmenu, ConsoleColor _consoleforeground, ConsoleColor _consolebackground)
 		{
-			this._changeconsolecolor(_consoleforeground, _consolebackground);
+			this._consolecolorchange(_consoleforeground, _consolebackground);
 			if (_iscreatefreshmenu) {
 				Console.Clear();
 			}
-			
-			this._showappthreaddata();
 
 			Dictionary<string, List<KeyValuePair<string, string>>> _menubase = this._getmenubase();
 			if (_menubase != null)
@@ -282,10 +293,6 @@ namespace _tryconsole
 
 			string _message = string.Empty;
 
-			_message += Environment.NewLine + "Press < ESC > for get back to Previous Menu.";
-			_message += Environment.NewLine + "********************************************";
-			Console.Write(_message);
-
 			// read keyboard input only when key any existance not passed
 			_mayday = _maydayexistingifany == default(ConsoleKeyInfo) ? Console.ReadKey(true) : _maydayexistingifany;
 		
@@ -297,16 +304,11 @@ namespace _tryconsole
 
 		private void _showfunctiondivider([Optional]bool _istopdivider)
 		{
-			// TODO: set arrangement for color considerations for functionalities here
-			//this._consolecolorchanger(ConsoleColor.White, ConsoleColor.Magenta);	
 			string _message = string.Empty;
-			_message += _istopdivider ? Environment.NewLine + Environment.NewLine : Environment.NewLine;
+			_message += _istopdivider ? Environment.NewLine + Environment.NewLine : Environment.NewLine + Environment.NewLine;
 			_message += "==================================================";
-			_message += !_istopdivider ? Environment.NewLine + Environment.NewLine : string.Empty;
+			_message += _istopdivider ? Environment.NewLine + Environment.NewLine : Environment.NewLine + Environment.NewLine;
 			Console.Write(_message);
-			// if (_istopdivider) {
-			// 	this._consolecolorchanger(ConsoleColor.Black, ConsoleColor.Yellow);		
-			// }
 		}
 
 		private void _showwrongmayday()
@@ -318,13 +320,23 @@ namespace _tryconsole
 
 		private void _showappthreaddata()
 		{
-			Console.WriteLine("TryConsole App Thread --ID " + Thread.CurrentThread.ManagedThreadId);
+			Console.Write("TryConsole App Thread --ID " + Thread.CurrentThread.ManagedThreadId);
 		}
 		
-		private void _changeconsolecolor(ConsoleColor _consoleforeground , ConsoleColor _consolebackground)
+		private void _consolecolorchange(ConsoleColor _consoleforeground , ConsoleColor _consolebackground)
 		{
 			Console.ForegroundColor = _consoleforeground;
 			Console.BackgroundColor = _consolebackground;
+		}
+
+		private void _consoleclear()
+		{
+			Console.Clear();
+		}
+
+		private void _dummyfunction()
+		{
+			// a dummy function ,not to use it for any action
 		}
 
 		#endregion
@@ -366,10 +378,10 @@ namespace _tryconsole
 					// module type
 					Type? _module = _modulecontainer.Value[0].GetType();
 
-					_message += _modulecount > 0 ? Environment.NewLine : string.Empty;
+					_message += _modulecount > 0 ? Environment.NewLine + Environment.NewLine : string.Empty;
 
 					// output module order number
-					_message += Environment.NewLine + "--(**module (" + ++_modulecount + ".))" + Environment.NewLine;
+					_message += "--(**module (" + ++_modulecount + ".))" + Environment.NewLine;
 					// output module description
 					_message += _module.FullName + " [" + _modulecontainer.Key + "]" + Environment.NewLine;
 					_message += "[[[";
@@ -545,7 +557,7 @@ namespace _tryconsole
 					this._setpropertyvalue(_instance_scholar2.GetProperty("_isactive"), _instanceobject_scholar2, true);
 				}
 
-				Console.Write(Environment.NewLine + "Sample Module Has Been Created. Congrats!");
+				Console.Write("Sample Module Has Been Created. Congrats!");
 			}
 			catch (Exception _exception) {
 				Console.WriteLine("EXCEPTION: " + _exception.Message);
@@ -602,27 +614,27 @@ namespace _tryconsole
 
 		#region Miscellaneous Functions
 
-		public void _showappabout()
+		private void _showappabout()
 		{
 			string _message = string.Empty;
 
 			// TODO: prepare the app about
+			this._showappthreaddata();
 
 			Console.Write(_message);
 		}
 
-		public void _currentdatetimefunction()
+		private void _currentdatetimefunction()
 		{
-			Console.Write(Environment.NewLine);
 			DateTime _datetime = DateTime.Now;
 			Console.WriteLine("The time: {0:d} at {0:T}", _datetime);
 			TimeZoneInfo _timezone = TimeZoneInfo.Local;
 			Console.Write("The time zone: {0}", _timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
 		}
 
-		public void _miscfunction1()
+		private void _miscfunction1()
 		{
-			string _message = Environment.NewLine;
+			string _message = string.Empty;
 			_message += "[ List of available types of properties: ]" + Environment.NewLine;
 			_message += "int : " + typeof(int).Name + Environment.NewLine;
 			_message += "float : " + typeof(float).Name + Environment.NewLine;
@@ -637,7 +649,7 @@ namespace _tryconsole
 			Console.Write(_message);
 		}
 
-		public void _miscfunction2()
+		private void _miscfunction2()
 		{
 			string _message = string.Empty;
 			_message += "[ Format For a Sample Menu ]" + Environment.NewLine;
@@ -648,7 +660,7 @@ namespace _tryconsole
 			_message += "4. Press < M > for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
 			_message += "5. Press < I > for New Input for All Module Instances (properties)" + Environment.NewLine;
 			_message += "*********************************************************************************";
-			Console.Write(Environment.NewLine + Environment.NewLine + _message + Environment.NewLine);
+			Console.Write(_message);
 		}
 
 		#endregion
