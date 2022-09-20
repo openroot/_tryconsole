@@ -19,9 +19,9 @@ namespace _tryconsole
 			_gateway _gateway = new _gateway();
 			
 			CancellationTokenSource _cancellationtokensource = new CancellationTokenSource();
-      		CancellationToken _cancellationtoken = _cancellationtokensource.Token;
+			CancellationToken _cancellationtoken = _cancellationtokensource.Token;
 			Task _executeprimarymenutask = Task.Run(() => _gateway._executeprimarymenu(), _cancellationtoken);
-      		_executeprimarymenutask.Wait();
+			_executeprimarymenutask.Wait();
 			await Task.Yield();
 			_cancellationtokensource.Cancel();
 
