@@ -6,9 +6,11 @@ using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 
+using _os;
+
 namespace _tryconsole
 {
-    public class _gateway
+    public class _gateway : _osscaffold
 	{
 		#region TryConsole App Gateway
 
@@ -18,12 +20,17 @@ namespace _tryconsole
 
 		public static async Task Main(string[] args)
 		{
-			_gateway _gateway = new _gateway();
+
+			_gateway _tryconsole = new _gateway();
+
+			// explicit info; just an example to get an os scaffold for an object
+			// _osscaffold _boat = new _osscaffold(_tryconsole);
+			// string _osbeautyname = _boat._info._beautyname;
 			
 			// Create a task runner for execute app menu
 			CancellationTokenSource _cancellationtokensource = new CancellationTokenSource();
 			CancellationToken _cancellationtoken = _cancellationtokensource.Token;
-			Task _executeprimarymenutask = Task.Run(() => _gateway._executeprimarymenu(), _cancellationtoken);
+			Task _executeprimarymenutask = Task.Run(() => _tryconsole._executeprimarymenu(), _cancellationtoken);
 			_executeprimarymenutask.Wait();
 			await Task.Yield();
 			_cancellationtokensource.Cancel();
@@ -382,7 +389,7 @@ namespace _tryconsole
 
 		private void _showappthreaddata()
 		{
-			Console.Write("TryConsole App Thread --ID " + Thread.CurrentThread.ManagedThreadId);
+			Console.Write("APP THREAD --ID " + Thread.CurrentThread.ManagedThreadId);
 		}
 
 		private void _showappabout()
@@ -390,6 +397,7 @@ namespace _tryconsole
 			string _message = string.Empty;
 
 			// TODO: prepare the app about
+			_message += Environment.NewLine + "APP NAME: " + this._info._beautyname;
 			this._showappthreaddata();
 
 			Console.Write(_message);
