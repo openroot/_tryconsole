@@ -10,6 +10,8 @@ namespace _tryconsole
 {
     public class _gateway
 	{
+		#region TryConsole App Gateway
+
 		Dictionary<Guid, List<Object>> _modulescontainer = new Dictionary<Guid, List<Object>>() {};
 
 		public _gateway() {}
@@ -40,6 +42,23 @@ namespace _tryconsole
 				_cancellationtokensource.Dispose();
 			}
 		}
+		
+		#endregion
+
+		#region TryConsole App Console Operations
+
+		private void _consolecolorchange(ConsoleColor _consoleforeground , ConsoleColor _consolebackground)
+		{
+			Console.ForegroundColor = _consoleforeground;
+			Console.BackgroundColor = _consolebackground;
+		}
+
+		private void _consoleclear()
+		{
+			Console.Clear();
+		}
+
+		#endregion
 
 		#region TryConsole App Menu Section
 
@@ -62,7 +81,7 @@ namespace _tryconsole
 				{
 					case ConsoleKey.C:
 						// clear the Console screen
-						Console.Clear();
+						this._consoleclear();
 						break;
 					
 					case ConsoleKey.F:
@@ -98,29 +117,29 @@ namespace _tryconsole
 										switch (_maydaymoduleoperationmenu.Key)
 										{
 											case ConsoleKey.S:
-												this._showfunctiondivider(true);
+												this._showblockdivider(true);
 												this._createsamplemodule();
-												this._showfunctiondivider();
+												this._showblockdivider();
 												break;
 											case ConsoleKey.C:
-												this._showfunctiondivider(true);
+												this._showblockdivider(true);
 												this._traversemodules('c');
-												this._showfunctiondivider();
+												this._showblockdivider();
 												break;
 											case ConsoleKey.O:
-												this._showfunctiondivider(true);
+												this._showblockdivider(true);
 												this._traversemodules('o');
-												this._showfunctiondivider();
+												this._showblockdivider();
 												break;
 											case ConsoleKey.M:
-												this._showfunctiondivider(true);
+												this._showblockdivider(true);
 												this._createmodulemanually();
-												this._showfunctiondivider();
+												this._showblockdivider();
 												break;
 											case ConsoleKey.I:
-												this._showfunctiondivider(true);
+												this._showblockdivider(true);
 												this._traversemodules('i');
-												this._showfunctiondivider();
+												this._showblockdivider();
 												break;
 											default:
 												this._showwrongmayday();
@@ -130,7 +149,7 @@ namespace _tryconsole
 										// break the loop
 										if (_maydaymoduleoperationmenu.Key == ConsoleKey.Escape)
 										{
-											Console.Clear();
+											this._consoleclear();
 											break;
 										}
 										else
@@ -145,19 +164,19 @@ namespace _tryconsole
 									}
 									break;
 								case ConsoleKey.B:
-									this._showfunctiondivider(true);
-									this._currentdatetimefunction();
-									this._showfunctiondivider();
+									this._showblockdivider(true);
+									this._showcurrentdatetimefunction();
+									this._showblockdivider();
 									break;
 								case ConsoleKey.C:
-									this._showfunctiondivider(true);
+									this._showblockdivider(true);
 									this._miscfunction1();
-									this._showfunctiondivider();
+									this._showblockdivider();
 									break;
 								case ConsoleKey.D:
-									this._showfunctiondivider(true);
+									this._showblockdivider(true);
 									this._miscfunction2();
-									this._showfunctiondivider();
+									this._showblockdivider();
 									break;
 								default:
 									this._showwrongmayday();
@@ -167,7 +186,7 @@ namespace _tryconsole
 							// break the loop
 							if (_maydayfunctionmenu.Key == ConsoleKey.Escape)
 							{
-								Console.Clear();
+								this._consoleclear();
 								break;
 							}
 							else
@@ -182,10 +201,10 @@ namespace _tryconsole
 						}
 						break;
 					case ConsoleKey.A:
-						this._showfunctiondivider(true);
+						this._showblockdivider(true);
 						Action _showappaboutaction = new Action(this._showappabout);
 						_showappaboutaction();
-						this._showfunctiondivider();
+						this._showblockdivider();
 						break;
 					default:
 						this._showwrongmayday();
@@ -195,7 +214,7 @@ namespace _tryconsole
 				// break the loop
 				if (_maydayprimarymenu.Key == ConsoleKey.Escape)
 				{
-					Console.Clear();
+					this._consoleclear();
 					break;
 				}
 				else
@@ -210,12 +229,88 @@ namespace _tryconsole
 			}
 		}
 
+		private void _showamenu(string _menukey, bool _iscreatefreshmenu, ConsoleColor _consoleforeground, ConsoleColor _consolebackground)
+		{
+			this._consolecolorchange(_consoleforeground, _consolebackground);
+			if (_iscreatefreshmenu) {
+				this._consoleclear();
+			}
+
+			// output formatted string of provided menu group
+			Console.Write(this._getformattedmenugroupstring(this._getamenugroup(_menukey)));
+		}
+
+		private KeyValuePair<string, List<KeyValuePair<string, string>>> _getamenugroup(string _menukey)
+		{
+			KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup = new KeyValuePair<string, List<KeyValuePair<string, string>>>() {};
+			if (!String.IsNullOrEmpty(_menukey))
+			{
+				Dictionary<string, List<KeyValuePair<string, string>>> _menubase = this._getmenubase();
+				if (_menubase != null)
+				{
+					foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroupthis in _menubase)
+					{
+						if (_menugroupthis.Key.Equals(_menukey)) {
+
+							_menugroup = _menugroupthis;
+						}
+					}
+				}
+			}
+			return _menugroup;
+		}
+
+		private string _getformattedmenugroupstring(KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup)
+		{
+			string _message = string.Empty;
+
+			try
+			{
+				// symbol aabr. [0] menu name start enclosure , [1] menu name ending enclosure , [2] menu enclosure , [3] separator 
+				char[] _menuformattingsymbols = { '[', ']', '*', '-' };
+				int _count = 0, _maxlengthofmenudescription = 0;
+				List<string> _listofformattedmenudescription = new List<string>();
+
+				foreach (KeyValuePair<string, string> _menu in _menugroup.Value)
+				{
+					string _formattedmenudescription = string.Empty;
+					_formattedmenudescription = !_menu.Key.Equals("separator") ?
+						++_count + ". Press < " + _menu.Key.ToUpper() + " > " + _menu.Value + Environment.NewLine : "separator";
+					
+					// meanlines
+					_listofformattedmenudescription.Add(_formattedmenudescription);
+					_maxlengthofmenudescription = _maxlengthofmenudescription < _formattedmenudescription.Length ? _formattedmenudescription.Length : _maxlengthofmenudescription;
+				}
+				--_maxlengthofmenudescription;
+
+				// firstline
+				_listofformattedmenudescription = _listofformattedmenudescription.Prepend(_menuformattingsymbols[0] + " " + _menugroup.Key.ToUpper() + " " + _menuformattingsymbols[1]
+					+ new String(_menuformattingsymbols[2], _maxlengthofmenudescription - _menugroup.Key.Length - 4) + Environment.NewLine).ToList();
+				// lastline
+				_listofformattedmenudescription.Add(new String(_menuformattingsymbols[2], _maxlengthofmenudescription));
+				// format the 'separator' lines
+				for(int _index = 0; _index < _listofformattedmenudescription.Count; _index++)
+				{
+					if (_listofformattedmenudescription[_index].Equals("separator"))
+					{
+						_listofformattedmenudescription[_index] = new String(_menuformattingsymbols[3], _maxlengthofmenudescription) + Environment.NewLine;
+					}
+				}
+
+				_message = String.Join("", _listofformattedmenudescription);
+			}
+			catch (Exception _exception) {
+				throw new Exception("EXECEPTION: " + _exception.Message);
+			}
+
+			return _message;
+		}
+
 		private Dictionary<string, List<KeyValuePair<string, string>>> _getmenubase()
 		{
 			Dictionary<string, List<KeyValuePair<string, string>>> _menubase = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
 			_menubase.Add("menu" , new List<KeyValuePair<string, string>>() {
-				new KeyValuePair<string, string>("esc", "for Exit App"),
 				new KeyValuePair<string, string>("c", "for Clearing Screen"),
 				new KeyValuePair<string, string>("f", "for Opening Function Menu **(sub-menu)")
 			});
@@ -243,48 +338,25 @@ namespace _tryconsole
 			return _menubase;
 		}
 
-		private void _showamenu(string _menukey, bool _iscreatefreshmenu, ConsoleColor _consoleforeground, ConsoleColor _consolebackground)
+		private void _showblockdivider([Optional]bool _istopone)
 		{
-			this._consolecolorchange(_consoleforeground, _consolebackground);
-			if (_iscreatefreshmenu) {
-				Console.Clear();
-			}
-
-			Dictionary<string, List<KeyValuePair<string, string>>> _menubase = this._getmenubase();
-			if (_menubase != null)
-			{
-				foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup in _menubase)
-				{
-					if (_menugroup.Key.Equals(_menukey)) {
-						// output formatted string of provided menu group
-						Console.Write(this._getformattedmenugroupstring(_menugroup));
-					}
-				}
-			}
+			string _message = string.Empty;
+			_message += _istopone ? Environment.NewLine + Environment.NewLine : Environment.NewLine + Environment.NewLine;
+			_message += "==================================================";
+			_message += _istopone ? Environment.NewLine + Environment.NewLine : Environment.NewLine + Environment.NewLine;
+			Console.Write(_message);
 		}
 
-		private string _getformattedmenugroupstring(KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup)
+		private void _showwrongmayday()
 		{
-			// formatted string of a menu group
-			string _formattedmenugroup = string.Empty;
+			string _message = string.Empty;
+			_message += " (!alert) Wrong Input!" + Environment.NewLine + Environment.NewLine;
+			Console.Write(_message);
+		}
 
-			char[] _menuseparatorcharacter = { '[', ']', '*' };
-			int _count = 0, _maxlengthofmenudescription = 0;
-
-			foreach (KeyValuePair<string, string> _menu in _menugroup.Value)
-			{
-				string _formattedmenuline = ++_count + ". Press < " + _menu.Key.ToUpper() + " > " + _menu.Value + Environment.NewLine;
-				_formattedmenugroup += _formattedmenuline;
-				_maxlengthofmenudescription = _maxlengthofmenudescription < _formattedmenuline.Length ? _formattedmenuline.Length : _maxlengthofmenudescription;
-			}
-			--_maxlengthofmenudescription;
-
-			_formattedmenugroup = _menuseparatorcharacter[0] + " " + _menugroup.Key.ToUpper() + " " + _menuseparatorcharacter[1]
-				+ new String(_menuseparatorcharacter[2], _maxlengthofmenudescription - _menugroup.Key.Length - 4)
-				+ Environment.NewLine + _formattedmenugroup;
-			_formattedmenugroup += new String(_menuseparatorcharacter[2], _maxlengthofmenudescription);
-
-			return _formattedmenugroup;
+		private void _dummyfunctionformenuaction()
+		{
+			// a dummy function ,not to use it for any action
 		}
 
 		private ConsoleKeyInfo _improviseamayday([Optional]ConsoleKeyInfo _maydayexistingifany)
@@ -302,48 +374,69 @@ namespace _tryconsole
 			return _mayday;
 		}
 
-		private void _showfunctiondivider([Optional]bool _istopdivider)
-		{
-			string _message = string.Empty;
-			_message += _istopdivider ? Environment.NewLine + Environment.NewLine : Environment.NewLine + Environment.NewLine;
-			_message += "==================================================";
-			_message += _istopdivider ? Environment.NewLine + Environment.NewLine : Environment.NewLine + Environment.NewLine;
-			Console.Write(_message);
-		}
+		#endregion
 
-		private void _showwrongmayday()
-		{
-			string _message = string.Empty;
-			_message += " (!alert) Wrong Input!" + Environment.NewLine + Environment.NewLine;
-			Console.Write(_message);
-		}
+		#region TryConsole App Functionalities
+
+		#region Miscellaneous Functionalities
 
 		private void _showappthreaddata()
 		{
 			Console.Write("TryConsole App Thread --ID " + Thread.CurrentThread.ManagedThreadId);
 		}
-		
-		private void _consolecolorchange(ConsoleColor _consoleforeground , ConsoleColor _consolebackground)
+
+		private void _showappabout()
 		{
-			Console.ForegroundColor = _consoleforeground;
-			Console.BackgroundColor = _consolebackground;
+			string _message = string.Empty;
+
+			// TODO: prepare the app about
+			this._showappthreaddata();
+
+			Console.Write(_message);
 		}
 
-		private void _consoleclear()
+		private void _showcurrentdatetimefunction()
 		{
-			Console.Clear();
+			DateTime _datetime = DateTime.Now;
+			Console.WriteLine("The time: {0:d} at {0:T}", _datetime);
+			TimeZoneInfo _timezone = TimeZoneInfo.Local;
+			Console.Write("The time zone: {0}", _timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
 		}
 
-		private void _dummyfunction()
+		private void _miscfunction1()
 		{
-			// a dummy function ,not to use it for any action
+			string _message = string.Empty;
+			_message += "[ List of available types of properties: ]" + Environment.NewLine;
+			_message += "int : " + typeof(int).Name + Environment.NewLine;
+			_message += "float : " + typeof(float).Name + Environment.NewLine;
+			_message += "double : " + typeof(double).Name + Environment.NewLine;
+			_message += "char : " + typeof(char).Name + Environment.NewLine;
+			_message += "bool : " + typeof(bool).Name + Environment.NewLine;
+			_message += "string : " + typeof(string).Name + Environment.NewLine;
+			_message += "Int16 : " + typeof(Int16).Name + Environment.NewLine;
+			_message += "Int32 : " + typeof(Int32).Name + Environment.NewLine;
+			_message += "Int64 : " + typeof(Int64).Name + Environment.NewLine;
+			_message += "String : " + typeof(String).Name;
+			Console.Write(_message);
+		}
+
+		private void _miscfunction2()
+		{
+			string _message = string.Empty;
+			_message += "[ Format For a Sample Menu ]" + Environment.NewLine;
+			_message += "[ MODULE MENU ]******************************************************************" + Environment.NewLine;
+			_message += "1. Press < S > for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
+			_message += "2. Press < C > for Output Cultural Behavior for All Module Instances (properties)" + Environment.NewLine;
+			_message += "3. Press < O > for Output All Module Instances (properties)" + Environment.NewLine;
+			_message += "4. Press < M > for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
+			_message += "5. Press < I > for New Input for All Module Instances (properties)" + Environment.NewLine;
+			_message += "*********************************************************************************";
+			Console.Write(_message);
 		}
 
 		#endregion
 
-		#region TryConsole App Functionalities
-
-		#region Module Operations
+		#region Functionality named Module Operations
 
 		private void _addinstanceobjecttomodulescontainer(Object? _instanceobject)
 		{
@@ -608,59 +701,6 @@ namespace _tryconsole
 			{
 				// TODO: Might add more details on Property Culture
 			}
-		}
-
-		#endregion
-
-		#region Miscellaneous Functions
-
-		private void _showappabout()
-		{
-			string _message = string.Empty;
-
-			// TODO: prepare the app about
-			this._showappthreaddata();
-
-			Console.Write(_message);
-		}
-
-		private void _currentdatetimefunction()
-		{
-			DateTime _datetime = DateTime.Now;
-			Console.WriteLine("The time: {0:d} at {0:T}", _datetime);
-			TimeZoneInfo _timezone = TimeZoneInfo.Local;
-			Console.Write("The time zone: {0}", _timezone.IsDaylightSavingTime(_datetime) ? _timezone.DaylightName : _timezone.StandardName);
-		}
-
-		private void _miscfunction1()
-		{
-			string _message = string.Empty;
-			_message += "[ List of available types of properties: ]" + Environment.NewLine;
-			_message += "int : " + typeof(int).Name + Environment.NewLine;
-			_message += "float : " + typeof(float).Name + Environment.NewLine;
-			_message += "double : " + typeof(double).Name + Environment.NewLine;
-			_message += "char : " + typeof(char).Name + Environment.NewLine;
-			_message += "bool : " + typeof(bool).Name + Environment.NewLine;
-			_message += "string : " + typeof(string).Name + Environment.NewLine;
-			_message += "Int16 : " + typeof(Int16).Name + Environment.NewLine;
-			_message += "Int32 : " + typeof(Int32).Name + Environment.NewLine;
-			_message += "Int64 : " + typeof(Int64).Name + Environment.NewLine;
-			_message += "String : " + typeof(String).Name;
-			Console.Write(_message);
-		}
-
-		private void _miscfunction2()
-		{
-			string _message = string.Empty;
-			_message += "[ Format For a Sample Menu ]" + Environment.NewLine;
-			_message += "[ MODULE MENU ]******************************************************************" + Environment.NewLine;
-			_message += "1. Press < S > for Creating a Sample Module & It's Instance Prefilled" + Environment.NewLine;
-			_message += "2. Press < C > for Output Cultural Behavior for All Module Instances (properties)" + Environment.NewLine;
-			_message += "3. Press < O > for Output All Module Instances (properties)" + Environment.NewLine;
-			_message += "4. Press < M > for Creating Manual Module & It's Instance(s)" + Environment.NewLine;
-			_message += "5. Press < I > for New Input for All Module Instances (properties)" + Environment.NewLine;
-			_message += "*********************************************************************************";
-			Console.Write(_message);
 		}
 
 		#endregion

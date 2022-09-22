@@ -7,7 +7,7 @@ namespace _tryconsole
 {
 	public class _builddynamicmodule
 	{
-		_moduleconfiguration _moduleconfiguration { get; set; }
+		readonly _moduleconfiguration _moduleconfiguration;
 		TypeBuilder? _type { get; set; }
 
 		/// <summary>
@@ -21,6 +21,9 @@ namespace _tryconsole
 			this._preparestructure();
 		}
 
+		/// <summary>
+		/// Prepare Module Structure
+		/// </summary>
 		private void _preparestructure()
 		{
 			// Check if configuration file not null
@@ -82,6 +85,9 @@ namespace _tryconsole
 			}
 		}
 
+		/// <summary>
+		/// Assembly Definition
+		/// </summary>
 		private void _definemodule()
 		{
 			AssemblyName _assemblyname = new AssemblyName(this._moduleconfiguration._modulename);
