@@ -104,12 +104,14 @@ namespace _tryconsole
 				// basic field
 				FieldBuilder _field = this._type.DefineField("_field" + _propertyname, _propertytype, FieldAttributes.Private);
 				
+				// get method for basic field
 				MethodBuilder _get_method = this._type.DefineMethod("_get" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, _propertytype, Type.EmptyTypes);
 				ILGenerator _get_immediatelanguage = _get_method.GetILGenerator();
 				_get_immediatelanguage.Emit(OpCodes.Ldarg_0);
 				_get_immediatelanguage.Emit(OpCodes.Ldfld, _field);
 				_get_immediatelanguage.Emit(OpCodes.Ret);
 				
+				// set method for basic field
 				MethodBuilder _set_method = this._type.DefineMethod("_set" + _propertyname, MethodAttributes.Public | MethodAttributes.SpecialName | MethodAttributes.HideBySig, null, new[]{_propertytype});
 				ILGenerator _set_immediatelanguage = _set_method.GetILGenerator();
 				Label _modifyproperty = _set_immediatelanguage.DefineLabel();
@@ -122,7 +124,7 @@ namespace _tryconsole
 				_set_immediatelanguage.MarkLabel(_exitset);
 				_set_immediatelanguage.Emit(OpCodes.Ret);
 
-				// { get; set; } method for property on thy same field
+				// attaching newly created basic field to new property
 				PropertyBuilder _property = this._type.DefineProperty(_propertyname, PropertyAttributes.HasDefault, _propertytype, null);
 				_property.SetGetMethod(_get_method);
 				_property.SetSetMethod(_set_method);
