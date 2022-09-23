@@ -17,7 +17,7 @@ namespace _tryconsole
 		public _builddynamicmodule(_moduleconfiguration _moduleconfiguration)
 		{
 			this._moduleconfiguration = _moduleconfiguration;
-			
+
 			this._preparestructure();
 		}
 
@@ -47,16 +47,16 @@ namespace _tryconsole
 								_ispropertiescompliant = false;
 							}
 						}
-
+						
 						// Preparing the module
 						if (_ispropertiescompliant)
 						{
 							// Define initial structure of module
 							this._definemodule();
-
+							
 							// Define module constructor
 							this._definemoduleconstructor();
-
+							
 							foreach (_propertyconfiguration _property in this._moduleconfiguration._properties) {
 								// Define this property
 								this._definemoduleproperty(_property._type, _property._name);
@@ -241,5 +241,4 @@ namespace _tryconsole
 			return _issystemdefaulttype;
 		}
 	}
-
 }
