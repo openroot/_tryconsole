@@ -8,7 +8,7 @@ namespace _os
 	{
         // private properties
         private Object _o;
-		private _osinfo _i;
+        private _osinfo _i;
         private _osmenu _m;
 
         // public properties
