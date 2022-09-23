@@ -4,53 +4,53 @@ using System.Reflection;
 
 namespace _os
 {
-public class _osscaffold
-{
-// private properties
-private Object _o;
-private _osinfo _i;
-private _osmenu _m;
+    public class _osscaffold
+    {
+    // private properties
+    private Object _o;
+    private _osinfo _i;
+    private _osmenu _m;
 
-// public properties
-public _osinfo _info
-{
-get { return _i; }
-}
-public _osmenu _menu
-{
-get { return _m; }
-}
+    // public properties
+    public _osinfo _info
+    {
+    get { return _i; }
+    }
+    public _osmenu _menu
+    {
+    get { return _m; }
+    }
 
-// constructor ,for implicit operation
-public _osscaffold()
-{
-this._o = this;
-if (this._o != null)
-{
-// assiging initial & non-nullable properties
-this._i = new _osinfo(this._o);
-this._m = new _osmenu();
-}
-else {
-throw new Exception("EXCEPTION: " + "Object not found");
-}
-}
+    // constructor ,for implicit operation
+    public _osscaffold()
+    {
+    this._o = this;
+    if (this._o != null)
+    {
+    // assiging initial & non-nullable properties
+    this._i = new _osinfo(this._o);
+    this._m = new _osmenu();
+    }
+    else {
+    throw new Exception("EXCEPTION: " + "Object not found");
+    }
+    }
 
-// constructor ,for explicit operation
-public _osscaffold(Object _sentobject)
-{
-this._o = _sentobject;
-if (this._o != null)
-{
-// assiging initial & non-nullable properties
-this._i = new _osinfo(this._o);
-this._m = new _osmenu();
-}
-else {
-throw new Exception("EXCEPTION: " + "Object not found");
-}
-}
-}
+    // constructor ,for explicit operation
+    public _osscaffold(Object _sentobject)
+    {
+    this._o = _sentobject;
+    if (this._o != null)
+    {
+    // assiging initial & non-nullable properties
+    this._i = new _osinfo(this._o);
+    this._m = new _osmenu();
+    }
+    else {
+    throw new Exception("EXCEPTION: " + "Object not found");
+    }
+    }
+    }
 
     public class _osinfo
     {
