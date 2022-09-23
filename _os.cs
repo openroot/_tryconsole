@@ -14,11 +14,15 @@ namespace _os
 		// public properties
 		public _osinfo _info
 		{
-			get { return _i; }
+			get {
+				return this._i;
+			}
 		}
 		public _osmenu _menu
 		{
-			get { return _m; }
+			get {
+				return this._m;
+			}
 		}
 
 		// constructor ,for implicit operation
@@ -62,15 +66,21 @@ namespace _os
 		// public properties
 		public Assembly _assembly
 		{
-			get { return this._a; }
+			get { 
+				return this._a;
+			}
 		}
 		public Type? _type
 		{
-			get { return this._t; }
+			get {
+				return this._t;
+			}
 		}
 		public string _originalname
 		{
-			get { return this._n; }
+			get {
+				return this._n;
+			}
 		}
 		public string _beautyname
 		{
@@ -95,7 +105,8 @@ namespace _os
 		{
 			this._t = typeof(Object);
 
-			if (_sentobject.GetType() != null) {
+			if (_sentobject.GetType() != null)
+			{
 				// assiging initial & non-nullable properties
 				this._a = this._t?.Assembly ?? new Object().GetType().Assembly ;
 				this._t = _sentobject.GetType();
@@ -149,11 +160,16 @@ namespace _os
 		public class _menu
 		{
 			// private properties
-
+			private string? _tk;
 
 
 			// public properties
-			string? _menutriggeringkey { get; set; }
+			public string? _triggeringkey
+			{
+				get {
+					return this._tk;
+				}
+			}
 			public _menuform _nextmenuform;
 
 			// constructor ,for implicit operation
