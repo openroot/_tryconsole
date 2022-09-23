@@ -397,7 +397,7 @@ namespace _tryconsole
 			// TODO: prepare the app about
 			_message += Environment.NewLine + "APP NAME: " + this._info._beautyname;
 			// TODO: just an example of accessing menu of the app (is already built)
-			_osmenu._menu? _menu = this._menu._menubase._menus.FirstOrDefault();
+			_osmenu._menu? _menu = this._menu._menus._set.FirstOrDefault();
 			this._showappthreaddata();
 
 			Console.Write(_message);

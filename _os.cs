@@ -121,56 +121,84 @@ namespace _os
 	public class _osmenu
 	{
 		// public properties
-		public _menuform _menubase;
+		public _menuset _menus;
 
 		// constructor ,for implicit operation
 		public _osmenu()
 		{
 			// assiging initial & non-nullable properties
-			this._menubase = new _osmenu._menuform();
+			this._menus = new _osmenu._menuset();
 		}
 
 		// constructor ,for explicit operation
-		public _osmenu(_menuform _menubase)
+		public _osmenu(_menuset _menubase)
 		{
 			// assiging initial & non-nullable properties
-			this._menubase = _menubase;
+			this._menus = _menubase;
 		}
 
-		public class _menuform
+		public class _menuset
 		{
 			// public properties
-			public List<_menu> _menus;
+			public List<_menu> _set;
 
 			// constructor ,for implicit operation
-			public _menuform()
+			public _menuset()
 			{
 				// assiging initial & non-nullable properties
-				this._menus = new List<_menu>() {};
+				this._set = new List<_menu>() {};
 			}
 
 			// constructor ,for explicit operation
-			public _menuform(List<_menu> _menus)
+			public _menuset(List<_menu> _menus)
 			{
 				// assiging initial & non-nullable properties
-				this._menus = _menus;
+				this._set = _menus;
 			}
 		}
 
 		public class _menu
 		{
 			// private properties
+			private _accessortype? _a;
 			private string? _tk;
+			private string? _d;
+			private Action? _act;
+			private _menuset? _ns;
 
 
 			// public properties
+			public enum _accessortype: byte { ui, service };
+			public _accessortype? _accessor
+			{
+				get {
+					return this._a;
+				}
+			}
 			public string? _triggeringkey
 			{
 				get {
 					return this._tk;
 				}
 			}
-			//public _menuform? _nextmenuform;
+			public string? _description
+			{
+				get {
+					return this._d;
+				}
+			}
+			public Action? _action
+			{
+				get {
+					return this._act;
+				}
+			}
+			public _menuset? _nextset
+			{
+				get {
+					return this._ns;
+				}
+			}
 
 			// constructor ,for implicit operation
 			public _menu()
@@ -179,10 +207,10 @@ namespace _os
 			}
 
 			// constructor ,for explicit operation
-			public _menu(_menuform _nextmenuform)
+			public _menu(_menuset _nextset)
 			{
 				// assiging initial & non-nullable properties
-				//this._nextmenuform = _nextmenuform;
+				//this._ns = _nextset;
 			}
 		}
 	}
