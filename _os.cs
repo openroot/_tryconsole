@@ -22,8 +22,8 @@ namespace _os
         }
 
 		// constructor ,for implicit operation
-		public _osscaffold()
-		{
+        public _osscaffold()
+        {
             this._o = this;
             if (this._o != null)
             {
@@ -34,7 +34,7 @@ namespace _os
             else {
                 throw new Exception("EXCEPTION: " + "Object not found");
             }
-		}
+        }
 
 		// constructor ,for explicit operation
 		public _osscaffold(Object _sentobject)
