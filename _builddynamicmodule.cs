@@ -43,8 +43,7 @@ namespace _tryconsole
 							if (
 								String.IsNullOrEmpty(_property._name) || 
 								String.IsNullOrEmpty(_property._type.ToString())
-							)
-							{
+							) {
 								_ispropertiescompliant = false;
 							}
 						}
@@ -58,29 +57,24 @@ namespace _tryconsole
 							// Define module constructor
 							this._definemoduleconstructor();
 
-							foreach (_propertyconfiguration _property in this._moduleconfiguration._properties)
-							{
+							foreach (_propertyconfiguration _property in this._moduleconfiguration._properties) {
 								// Define this property
 								this._definemoduleproperty(_property._type, _property._name);
 							}
 						}
 					}
-					else if (!_ispropertiescompliant)
-					{
+					else if (!_ispropertiescompliant) {
 						throw new Exception("Property(s) of module is/are not compliant in module configuration file.");
 					}
-					else
-					{
+					else {
 						throw new Exception("Property(s) of module returned null in module configuration file.");
 					}
 				}
-				else
-				{
+				else {
 					throw new Exception("Name of module returned null or empty in module configuration file.");
 				}
 			}
-			else
-			{
+			else {
 				throw new Exception("returned null in module configuration file.");
 			}
 		}
