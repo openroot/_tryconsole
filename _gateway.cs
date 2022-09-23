@@ -294,7 +294,7 @@ namespace _tryconsole
 				// lastline
 				_listofformattedmenudescription.Add(new String(_menuformattingsymbols[2], _maxlengthofmenudescription));
 				// format the 'separator' lines
-				for(int _index = 0; _index < _listofformattedmenudescription.Count; _index++)
+				for (int _index = 0; _index < _listofformattedmenudescription.Count; _index++)
 				{
 					if (_listofformattedmenudescription[_index].Equals("separator"))
 					{
