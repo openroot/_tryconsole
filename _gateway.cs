@@ -193,17 +193,17 @@ namespace _tryconsole
 							// break the loop
 							if (_maydayfunctionmenu.Key == ConsoleKey.Escape)
 							{
-							this._consoleclear();
-							break;
+								this._consoleclear();
+								break;
 							}
 							else
 							{
-							// show menu at bottom placing
-							this._showamenu("function menu", false, ConsoleColor.White, ConsoleColor.DarkCyan);
-							// take keyboard input for the bottom placing menu
-							_maydayfunctionmenu = this._improviseamayday();
+								// show menu at bottom placing
+								this._showamenu("function menu", false, ConsoleColor.White, ConsoleColor.DarkCyan);
+								// take keyboard input for the bottom placing menu
+								_maydayfunctionmenu = this._improviseamayday();
 
-							_isonceenteredalreadyfunctionmenu = true;
+								_isonceenteredalreadyfunctionmenu = true;
 							}
 						}
 						break;
