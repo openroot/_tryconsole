@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -12,60 +11,60 @@ namespace _tryconsole
 {
 	public class _gateway : _osscaffold
 	{
-	#region TryConsole App Gateway
+		#region TryConsole App Gateway
 
-	Dictionary<Guid, List<Object>> _modulescontainer = new Dictionary<Guid, List<Object>>() {};
+		Dictionary<Guid, List<Object>> _modulescontainer = new Dictionary<Guid, List<Object>>() {};
 
-	public _gateway() {}
+		public _gateway() {}
 
-	public static async Task Main(string[] args)
-	{
+		public static async Task Main(string[] args)
+		{
 
-	_gateway _tryconsole = new _gateway();
+			_gateway _tryconsole = new _gateway();
 
-	// explicit info; just an example to get an os scaffold for an object
-	// _osscaffold _boat = new _osscaffold(_tryconsole);
-	// string _osbeautyname = _boat._info._beautyname;
+			// explicit info; just an example to get an os scaffold for an object
+			// _osscaffold _boat = new _osscaffold(_tryconsole);
+			// string _osbeautyname = _boat._info._beautyname;
 
-	// Create a task runner for execute app menu
-	CancellationTokenSource _cancellationtokensource = new CancellationTokenSource();
-	CancellationToken _cancellationtoken = _cancellationtokensource.Token;
-	Task _executeprimarymenutask = Task.Run(() => _tryconsole._executeprimarymenu(), _cancellationtoken);
-	_executeprimarymenutask.Wait();
-	await Task.Yield();
-	_cancellationtokensource.Cancel();
-	try {
-	await _executeprimarymenutask;
-	}
-	catch (AggregateException _exception)
-	{
-	Console.WriteLine("Exception(s):");
-	foreach (Exception _innerexception in _exception.InnerExceptions) {
-	Console.WriteLine("\t{0}:\t{1}", _innerexception.GetType().Name, _innerexception.Message);
-	}
-	Console.WriteLine(Environment.NewLine + "Task status: {0}", _executeprimarymenutask.Status);       
-	}
-	finally {
-	_cancellationtokensource.Dispose();
-	}
-	}
+			// Create a task runner for execute app menu
+			CancellationTokenSource _cancellationtokensource = new CancellationTokenSource();
+			CancellationToken _cancellationtoken = _cancellationtokensource.Token;
+			Task _executeprimarymenutask = Task.Run(() => _tryconsole._executeprimarymenu(), _cancellationtoken);
+			_executeprimarymenutask.Wait();
+			await Task.Yield();
+			_cancellationtokensource.Cancel();
+			try {
+				await _executeprimarymenutask;
+			}
+			catch (AggregateException _exception)
+			{
+				Console.WriteLine("Exception(s):");
+				foreach (Exception _innerexception in _exception.InnerExceptions) {
+					Console.WriteLine("\t{0}:\t{1}", _innerexception.GetType().Name, _innerexception.Message);
+				}
+				Console.WriteLine(Environment.NewLine + "Task status: {0}", _executeprimarymenutask.Status);       
+			}
+			finally {
+				_cancellationtokensource.Dispose();
+			}
+		}
 
-	#endregion
+		#endregion
 
-	#region TryConsole App Console Operations
+		#region TryConsole App Console Operations
 
-	private void _consolecolorchange(ConsoleColor _consoleforeground , ConsoleColor _consolebackground)
-	{
-	Console.ForegroundColor = _consoleforeground;
-	Console.BackgroundColor = _consolebackground;
-	}
+		private void _consolecolorchange(ConsoleColor _consoleforeground , ConsoleColor _consolebackground)
+		{
+			Console.ForegroundColor = _consoleforeground;
+			Console.BackgroundColor = _consolebackground;
+		}
 
-	private void _consoleclear()
-	{
-	Console.Clear();
-	}
+		private void _consoleclear()
+		{
+			Console.Clear();
+		}
 
-	#endregion
+		#endregion
 
 		#region TryConsole App Menu Section
 
