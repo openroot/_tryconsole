@@ -170,20 +170,19 @@ namespace _os
 					return this._tk;
 				}
 			}
-			public _menuform _nextmenuform;
+			//public _menuform? _nextmenuform;
 
 			// constructor ,for implicit operation
 			public _menu()
 			{
 				// assiging initial & non-nullable properties
-				this._nextmenuform = new _menuform();
 			}
 
 			// constructor ,for explicit operation
 			public _menu(_menuform _nextmenuform)
 			{
 				// assiging initial & non-nullable properties
-				this._nextmenuform = _nextmenuform;
+				//this._nextmenuform = _nextmenuform;
 			}
 		}
 	}
