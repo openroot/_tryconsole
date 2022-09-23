@@ -12,376 +12,376 @@ namespace _tryconsole
 {
 	public class _gateway : _osscaffold
 	{
-		#region TryConsole App Gateway
+	#region TryConsole App Gateway
 
-		Dictionary<Guid, List<Object>> _modulescontainer = new Dictionary<Guid, List<Object>>() {};
+	Dictionary<Guid, List<Object>> _modulescontainer = new Dictionary<Guid, List<Object>>() {};
 
-		public _gateway() {}
+	public _gateway() {}
 
-		public static async Task Main(string[] args)
-		{
+	public static async Task Main(string[] args)
+	{
 
-			_gateway _tryconsole = new _gateway();
+	_gateway _tryconsole = new _gateway();
 
-			// explicit info; just an example to get an os scaffold for an object
-			// _osscaffold _boat = new _osscaffold(_tryconsole);
-			// string _osbeautyname = _boat._info._beautyname;
-			
-			// Create a task runner for execute app menu
-			CancellationTokenSource _cancellationtokensource = new CancellationTokenSource();
-			CancellationToken _cancellationtoken = _cancellationtokensource.Token;
-			Task _executeprimarymenutask = Task.Run(() => _tryconsole._executeprimarymenu(), _cancellationtoken);
-			_executeprimarymenutask.Wait();
-			await Task.Yield();
-			_cancellationtokensource.Cancel();
-			try {
-				await _executeprimarymenutask;
-			}
-			catch (AggregateException _exception)
-			{
-				Console.WriteLine("Exception(s):");
-				foreach (Exception _innerexception in _exception.InnerExceptions) {
-					Console.WriteLine("\t{0}:\t{1}", _innerexception.GetType().Name, _innerexception.Message);
-				}
-				Console.WriteLine(Environment.NewLine + "Task status: {0}", _executeprimarymenutask.Status);       
-			}
-			finally {
-				_cancellationtokensource.Dispose();
-			}
-		}
-		
-		#endregion
+	// explicit info; just an example to get an os scaffold for an object
+	// _osscaffold _boat = new _osscaffold(_tryconsole);
+	// string _osbeautyname = _boat._info._beautyname;
 
-		#region TryConsole App Console Operations
+	// Create a task runner for execute app menu
+	CancellationTokenSource _cancellationtokensource = new CancellationTokenSource();
+	CancellationToken _cancellationtoken = _cancellationtokensource.Token;
+	Task _executeprimarymenutask = Task.Run(() => _tryconsole._executeprimarymenu(), _cancellationtoken);
+	_executeprimarymenutask.Wait();
+	await Task.Yield();
+	_cancellationtokensource.Cancel();
+	try {
+	await _executeprimarymenutask;
+	}
+	catch (AggregateException _exception)
+	{
+	Console.WriteLine("Exception(s):");
+	foreach (Exception _innerexception in _exception.InnerExceptions) {
+	Console.WriteLine("\t{0}:\t{1}", _innerexception.GetType().Name, _innerexception.Message);
+	}
+	Console.WriteLine(Environment.NewLine + "Task status: {0}", _executeprimarymenutask.Status);       
+	}
+	finally {
+	_cancellationtokensource.Dispose();
+	}
+	}
 
-		private void _consolecolorchange(ConsoleColor _consoleforeground , ConsoleColor _consolebackground)
-		{
-			Console.ForegroundColor = _consoleforeground;
-			Console.BackgroundColor = _consolebackground;
-		}
+	#endregion
 
-		private void _consoleclear()
-		{
-			Console.Clear();
-		}
+	#region TryConsole App Console Operations
 
-		#endregion
+	private void _consolecolorchange(ConsoleColor _consoleforeground , ConsoleColor _consolebackground)
+	{
+	Console.ForegroundColor = _consoleforeground;
+	Console.BackgroundColor = _consolebackground;
+	}
 
-		#region TryConsole App Menu Section
+	private void _consoleclear()
+	{
+	Console.Clear();
+	}
 
-		private void _executeprimarymenu()
-		{
-			// new menu
-			ConsoleKeyInfo _maydayprimarymenu = new ConsoleKeyInfo();
-			bool _isonceenteredprimarymenumenu = false;
+	#endregion
 
-			// loop through menu
-			while (true)
-			{
-				// show menu at top placing
-				this._showamenu("menu", true, ConsoleColor.White, ConsoleColor.DarkMagenta);
-				// take keyboard input for the top placing menu ,only when menu is showing for the first time in same iteration
-				_maydayprimarymenu = !_isonceenteredprimarymenumenu ?
-					this._improviseamayday() : this._improviseamayday(_maydayprimarymenu);
-				
-				switch (_maydayprimarymenu.Key)
-				{
-					case ConsoleKey.C:
-						// clear the Console screen
-						this._consoleclear();
-						break;
-					
-					case ConsoleKey.F:
-						// new menu				
-						ConsoleKeyInfo _maydayfunctionmenu = new ConsoleKeyInfo();
-						bool _isonceenteredalreadyfunctionmenu = false;
+	#region TryConsole App Menu Section
 
-						// loop through menu
-						while (true)
-						{
-							// show menu at top placing
-							this._showamenu("function menu", true, ConsoleColor.White, ConsoleColor.DarkCyan);
-							// take keyboard input for the top placing menu ,only when menu is showing for the first time in same iteration
-							_maydayfunctionmenu = !_isonceenteredalreadyfunctionmenu ?
-								this._improviseamayday() : this._improviseamayday(_maydayfunctionmenu);
-				
-							switch (_maydayfunctionmenu.Key)
-							{
-								case ConsoleKey.A:
-									// new menu
-									ConsoleKeyInfo _maydaymoduleoperationmenu = new ConsoleKeyInfo();
-									bool _isonceenteredalreadymoduleopeartionmenu = false;
+	private void _executeprimarymenu()
+	{
+	// new menu
+	ConsoleKeyInfo _maydayprimarymenu = new ConsoleKeyInfo();
+	bool _isonceenteredprimarymenumenu = false;
 
-									// loop through menu
-									while (true)
-									{
-										// show menu at top placing
-										this._showamenu("module menu", true, ConsoleColor.White, ConsoleColor.DarkCyan);
-										// take keyboard input for the top placing menu ,only when menu is showing for the first time in same iteration
-										_maydaymoduleoperationmenu = !_isonceenteredalreadymoduleopeartionmenu ?
-											this._improviseamayday() : this._improviseamayday(_maydaymoduleoperationmenu);
+	// loop through menu
+	while (true)
+	{
+	// show menu at top placing
+	this._showamenu("menu", true, ConsoleColor.White, ConsoleColor.DarkMagenta);
+	// take keyboard input for the top placing menu ,only when menu is showing for the first time in same iteration
+	_maydayprimarymenu = !_isonceenteredprimarymenumenu ?
+	this._improviseamayday() : this._improviseamayday(_maydayprimarymenu);
 
-										switch (_maydaymoduleoperationmenu.Key)
-										{
-											case ConsoleKey.S:
-												this._showblockdivider(true);
-												this._createsamplemodule();
-												this._showblockdivider();
-												break;
-											case ConsoleKey.C:
-												this._showblockdivider(true);
-												this._traversemodules('c');
-												this._showblockdivider();
-												break;
-											case ConsoleKey.O:
-												this._showblockdivider(true);
-												this._traversemodules('o');
-												this._showblockdivider();
-												break;
-											case ConsoleKey.M:
-												this._showblockdivider(true);
-												this._createmodulemanually();
-												this._showblockdivider();
-												break;
-											case ConsoleKey.I:
-												this._showblockdivider(true);
-												this._traversemodules('i');
-												this._showblockdivider();
-												break;
-											default:
-												this._showwrongmayday();
-												break;
-										}
+	switch (_maydayprimarymenu.Key)
+	{
+	case ConsoleKey.C:
+	// clear the Console screen
+	this._consoleclear();
+	break;
 
-										// break the loop
-										if (_maydaymoduleoperationmenu.Key == ConsoleKey.Escape)
-										{
-											this._consoleclear();
-											break;
-										}
-										else
-										{
-											// show menu at bottom placing
-											this._showamenu("module menu", false, ConsoleColor.White, ConsoleColor.DarkCyan);
-											// take keyboard input for the bottom placing menu
-											_maydaymoduleoperationmenu = this._improviseamayday();
+	case ConsoleKey.F:
+	// new menu				
+	ConsoleKeyInfo _maydayfunctionmenu = new ConsoleKeyInfo();
+	bool _isonceenteredalreadyfunctionmenu = false;
 
-											_isonceenteredalreadymoduleopeartionmenu = true;
-										}
-									}
-									break;
-								case ConsoleKey.B:
-									this._showblockdivider(true);
-									this._showcurrentdatetimefunction();
-									this._showblockdivider();
-									break;
-								case ConsoleKey.C:
-									this._showblockdivider(true);
-									this._miscfunction1();
-									this._showblockdivider();
-									break;
-								case ConsoleKey.D:
-									this._showblockdivider(true);
-									this._miscfunction2();
-									this._showblockdivider();
-									break;
-								default:
-									this._showwrongmayday();
-									break;
-							}
+	// loop through menu
+	while (true)
+	{
+	// show menu at top placing
+	this._showamenu("function menu", true, ConsoleColor.White, ConsoleColor.DarkCyan);
+	// take keyboard input for the top placing menu ,only when menu is showing for the first time in same iteration
+	_maydayfunctionmenu = !_isonceenteredalreadyfunctionmenu ?
+	this._improviseamayday() : this._improviseamayday(_maydayfunctionmenu);
 
-							// break the loop
-							if (_maydayfunctionmenu.Key == ConsoleKey.Escape)
-							{
-								this._consoleclear();
-								break;
-							}
-							else
-							{
-								// show menu at bottom placing
-								this._showamenu("function menu", false, ConsoleColor.White, ConsoleColor.DarkCyan);
-								// take keyboard input for the bottom placing menu
-								_maydayfunctionmenu = this._improviseamayday();
+	switch (_maydayfunctionmenu.Key)
+	{
+	case ConsoleKey.A:
+	// new menu
+	ConsoleKeyInfo _maydaymoduleoperationmenu = new ConsoleKeyInfo();
+	bool _isonceenteredalreadymoduleopeartionmenu = false;
 
-								_isonceenteredalreadyfunctionmenu = true;
-							}
-						}
-						break;
-					case ConsoleKey.A:
-						this._showblockdivider(true);
-						Action _showappaboutaction = new Action(this._showappabout);
-						_showappaboutaction();
-						this._showblockdivider();
-						break;
-					default:
-						this._showwrongmayday();
-						break;
-				}
+	// loop through menu
+	while (true)
+	{
+	// show menu at top placing
+	this._showamenu("module menu", true, ConsoleColor.White, ConsoleColor.DarkCyan);
+	// take keyboard input for the top placing menu ,only when menu is showing for the first time in same iteration
+	_maydaymoduleoperationmenu = !_isonceenteredalreadymoduleopeartionmenu ?
+	this._improviseamayday() : this._improviseamayday(_maydaymoduleoperationmenu);
 
-				// break the loop
-				if (_maydayprimarymenu.Key == ConsoleKey.Escape)
-				{
-					this._consoleclear();
-					break;
-				}
-				else
-				{
-					// show menu at bottom placing
-					this._showamenu("menu", false, ConsoleColor.White, ConsoleColor.DarkMagenta);
-					// take keyboard input for the bottom placing menu
-					_maydayprimarymenu = this._improviseamayday();
+	switch (_maydaymoduleoperationmenu.Key)
+	{
+	case ConsoleKey.S:
+	this._showblockdivider(true);
+	this._createsamplemodule();
+	this._showblockdivider();
+	break;
+	case ConsoleKey.C:
+	this._showblockdivider(true);
+	this._traversemodules('c');
+	this._showblockdivider();
+	break;
+	case ConsoleKey.O:
+	this._showblockdivider(true);
+	this._traversemodules('o');
+	this._showblockdivider();
+	break;
+	case ConsoleKey.M:
+	this._showblockdivider(true);
+	this._createmodulemanually();
+	this._showblockdivider();
+	break;
+	case ConsoleKey.I:
+	this._showblockdivider(true);
+	this._traversemodules('i');
+	this._showblockdivider();
+	break;
+	default:
+	this._showwrongmayday();
+	break;
+	}
 
-					_isonceenteredprimarymenumenu = true;
-				}
-			}
-		}
+	// break the loop
+	if (_maydaymoduleoperationmenu.Key == ConsoleKey.Escape)
+	{
+	this._consoleclear();
+	break;
+	}
+	else
+	{
+	// show menu at bottom placing
+	this._showamenu("module menu", false, ConsoleColor.White, ConsoleColor.DarkCyan);
+	// take keyboard input for the bottom placing menu
+	_maydaymoduleoperationmenu = this._improviseamayday();
 
-		private void _showamenu(string _menukey, bool _iscreatefreshmenu, ConsoleColor _consoleforeground, ConsoleColor _consolebackground)
-		{
-			this._consolecolorchange(_consoleforeground, _consolebackground);
-			if (_iscreatefreshmenu) {
-				this._consoleclear();
-			}
+	_isonceenteredalreadymoduleopeartionmenu = true;
+	}
+	}
+	break;
+	case ConsoleKey.B:
+	this._showblockdivider(true);
+	this._showcurrentdatetimefunction();
+	this._showblockdivider();
+	break;
+	case ConsoleKey.C:
+	this._showblockdivider(true);
+	this._miscfunction1();
+	this._showblockdivider();
+	break;
+	case ConsoleKey.D:
+	this._showblockdivider(true);
+	this._miscfunction2();
+	this._showblockdivider();
+	break;
+	default:
+	this._showwrongmayday();
+	break;
+	}
 
-			// output formatted string of provided menu group
-			Console.Write(this._getformattedmenugroupstring(this._getamenugroup(_menukey)));
-		}
+	// break the loop
+	if (_maydayfunctionmenu.Key == ConsoleKey.Escape)
+	{
+	this._consoleclear();
+	break;
+	}
+	else
+	{
+	// show menu at bottom placing
+	this._showamenu("function menu", false, ConsoleColor.White, ConsoleColor.DarkCyan);
+	// take keyboard input for the bottom placing menu
+	_maydayfunctionmenu = this._improviseamayday();
 
-		private KeyValuePair<string, List<KeyValuePair<string, string>>> _getamenugroup(string _menukey)
-		{
-			KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup = new KeyValuePair<string, List<KeyValuePair<string, string>>>() {};
-			if (!String.IsNullOrEmpty(_menukey))
-			{
-				Dictionary<string, List<KeyValuePair<string, string>>> _menubase = this._getmenubase();
-				if (_menubase != null)
-				{
-					foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroupthis in _menubase)
-					{
-						if (_menugroupthis.Key.Equals(_menukey)) {
+	_isonceenteredalreadyfunctionmenu = true;
+	}
+	}
+	break;
+	case ConsoleKey.A:
+	this._showblockdivider(true);
+	Action _showappaboutaction = new Action(this._showappabout);
+	_showappaboutaction();
+	this._showblockdivider();
+	break;
+	default:
+	this._showwrongmayday();
+	break;
+	}
 
-							_menugroup = _menugroupthis;
-						}
-					}
-				}
-			}
-			return _menugroup;
-		}
+	// break the loop
+	if (_maydayprimarymenu.Key == ConsoleKey.Escape)
+	{
+	this._consoleclear();
+	break;
+	}
+	else
+	{
+	// show menu at bottom placing
+	this._showamenu("menu", false, ConsoleColor.White, ConsoleColor.DarkMagenta);
+	// take keyboard input for the bottom placing menu
+	_maydayprimarymenu = this._improviseamayday();
 
-		private string _getformattedmenugroupstring(KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup)
-		{
-			string _message = string.Empty;
+	_isonceenteredprimarymenumenu = true;
+	}
+	}
+	}
 
-			try
-			{
-				// symbol aabr. [0] menu name start enclosure , [1] menu name ending enclosure , [2] menu enclosure , [3] separator 
-				char[] _menuformattingsymbols = { '[', ']', '*', '-' };
-				int _count = 0, _maxlengthofmenudescription = 0;
-				List<string> _listofformattedmenudescription = new List<string>();
+	private void _showamenu(string _menukey, bool _iscreatefreshmenu, ConsoleColor _consoleforeground, ConsoleColor _consolebackground)
+	{
+	this._consolecolorchange(_consoleforeground, _consolebackground);
+	if (_iscreatefreshmenu) {
+	this._consoleclear();
+	}
 
-				foreach (KeyValuePair<string, string> _menu in _menugroup.Value)
-				{
-					string _formattedmenudescription = string.Empty;
-					_formattedmenudescription = !_menu.Key.Equals("separator") ?
-						++_count + ". Press < " + _menu.Key.ToUpper() + " > " + _menu.Value + Environment.NewLine : "separator";
-					
-					// meanlines
-					_listofformattedmenudescription.Add(_formattedmenudescription);
-					_maxlengthofmenudescription = _maxlengthofmenudescription < _formattedmenudescription.Length ? _formattedmenudescription.Length : _maxlengthofmenudescription;
-				}
-				--_maxlengthofmenudescription;
+	// output formatted string of provided menu group
+	Console.Write(this._getformattedmenugroupstring(this._getamenugroup(_menukey)));
+	}
 
-				// firstline
-				_listofformattedmenudescription = _listofformattedmenudescription.Prepend(_menuformattingsymbols[0] + " " + _menugroup.Key.ToUpper() + " " + _menuformattingsymbols[1]
-					+ new String(_menuformattingsymbols[2], _maxlengthofmenudescription - _menugroup.Key.Length - 4) + Environment.NewLine).ToList();
-				// lastline
-				_listofformattedmenudescription.Add(new String(_menuformattingsymbols[2], _maxlengthofmenudescription));
-				// format the 'separator' lines
-				for(int _index = 0; _index < _listofformattedmenudescription.Count; _index++)
-				{
-					if (_listofformattedmenudescription[_index].Equals("separator"))
-					{
-						_listofformattedmenudescription[_index] = new String(_menuformattingsymbols[3], _maxlengthofmenudescription) + Environment.NewLine;
-					}
-				}
+	private KeyValuePair<string, List<KeyValuePair<string, string>>> _getamenugroup(string _menukey)
+	{
+	KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup = new KeyValuePair<string, List<KeyValuePair<string, string>>>() {};
+	if (!String.IsNullOrEmpty(_menukey))
+	{
+	Dictionary<string, List<KeyValuePair<string, string>>> _menubase = this._getmenubase();
+	if (_menubase != null)
+	{
+	foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroupthis in _menubase)
+	{
+	if (_menugroupthis.Key.Equals(_menukey)) {
 
-				_message = String.Join("", _listofformattedmenudescription);
-			}
-			catch (Exception _exception) {
-				throw new Exception("EXECEPTION: " + _exception.Message);
-			}
+	_menugroup = _menugroupthis;
+	}
+	}
+	}
+	}
+	return _menugroup;
+	}
 
-			return _message;
-		}
+	private string _getformattedmenugroupstring(KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup)
+	{
+	string _message = string.Empty;
 
-		private Dictionary<string, List<KeyValuePair<string, string>>> _getmenubase()
-		{
-			Dictionary<string, List<KeyValuePair<string, string>>> _menubase = new Dictionary<string, List<KeyValuePair<string, string>>>();
+	try
+	{
+	// symbol aabr. [0] menu name start enclosure , [1] menu name ending enclosure , [2] menu enclosure , [3] separator 
+	char[] _menuformattingsymbols = { '[', ']', '*', '-' };
+	int _count = 0, _maxlengthofmenudescription = 0;
+	List<string> _listofformattedmenudescription = new List<string>();
 
-			_menubase.Add("menu" , new List<KeyValuePair<string, string>>() {
-				new KeyValuePair<string, string>("c", "for Clearing Screen"),
-				new KeyValuePair<string, string>("f", "for Opening Function Menu **(sub-menu)")
-			});
-			_menubase.Add("function menu" , new List<KeyValuePair<string, string>>() {
-				new KeyValuePair<string, string>("a", "for Module Creation & Operations **(sub-menu)"),
-				new KeyValuePair<string, string>("b", "for Current DateTime Function."),
-				new KeyValuePair<string, string>("c", "for Misc Function 1."),
-				new KeyValuePair<string, string>("d", "for Misc Function 2.")
-			});
-			_menubase.Add("module menu" , new List<KeyValuePair<string, string>>() {
-				new KeyValuePair<string, string>("s", "for Creating a Sample Module & It's Instance Prefilled"),
-				new KeyValuePair<string, string>("c", "for Output Cultural Behavior for All Module Instances (properties)"),
-				new KeyValuePair<string, string>("o", "for Output All Module Instances (properties)"),
-				new KeyValuePair<string, string>("m", "for Creating Manual Module & It's Instance(s)"),
-				new KeyValuePair<string, string>("i", "for New Input for All Module Instances (properties)")
-			});
+	foreach (KeyValuePair<string, string> _menu in _menugroup.Value)
+	{
+	string _formattedmenudescription = string.Empty;
+	_formattedmenudescription = !_menu.Key.Equals("separator") ?
+	++_count + ". Press < " + _menu.Key.ToUpper() + " > " + _menu.Value + Environment.NewLine : "separator";
 
-			foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup in _menubase)
-			{
-				_menugroup.Value.Add(new KeyValuePair<string, string>("separator", "------------------------------") {});
-				_menugroup.Value.Add(new KeyValuePair<string, string>("esc", "for get back to Previous Menu.") {});
-				_menugroup.Value.Add(new KeyValuePair<string, string>("a", "About") {});
-			}
+	// meanlines
+	_listofformattedmenudescription.Add(_formattedmenudescription);
+	_maxlengthofmenudescription = _maxlengthofmenudescription < _formattedmenudescription.Length ? _formattedmenudescription.Length : _maxlengthofmenudescription;
+	}
+	--_maxlengthofmenudescription;
 
-			return _menubase;
-		}
+	// firstline
+	_listofformattedmenudescription = _listofformattedmenudescription.Prepend(_menuformattingsymbols[0] + " " + _menugroup.Key.ToUpper() + " " + _menuformattingsymbols[1]
+	+ new String(_menuformattingsymbols[2], _maxlengthofmenudescription - _menugroup.Key.Length - 4) + Environment.NewLine).ToList();
+	// lastline
+	_listofformattedmenudescription.Add(new String(_menuformattingsymbols[2], _maxlengthofmenudescription));
+	// format the 'separator' lines
+	for(int _index = 0; _index < _listofformattedmenudescription.Count; _index++)
+	{
+	if (_listofformattedmenudescription[_index].Equals("separator"))
+	{
+	_listofformattedmenudescription[_index] = new String(_menuformattingsymbols[3], _maxlengthofmenudescription) + Environment.NewLine;
+	}
+	}
 
-		private void _showblockdivider([Optional]bool _istopone)
-		{
-			string _message = string.Empty;
-			_message += _istopone ? Environment.NewLine + Environment.NewLine : Environment.NewLine + Environment.NewLine;
-			_message += "==================================================";
-			_message += _istopone ? Environment.NewLine + Environment.NewLine : Environment.NewLine + Environment.NewLine;
-			Console.Write(_message);
-		}
+	_message = String.Join("", _listofformattedmenudescription);
+	}
+	catch (Exception _exception) {
+	throw new Exception("EXECEPTION: " + _exception.Message);
+	}
 
-		private void _showwrongmayday()
-		{
-			string _message = string.Empty;
-			_message += " (!alert) Wrong Input!" + Environment.NewLine + Environment.NewLine;
-			Console.Write(_message);
-		}
+	return _message;
+	}
 
-		private void _dummyfunctionformenuaction()
-		{
-			// a dummy function ,not to use it for any action
-		}
+	private Dictionary<string, List<KeyValuePair<string, string>>> _getmenubase()
+	{
+	Dictionary<string, List<KeyValuePair<string, string>>> _menubase = new Dictionary<string, List<KeyValuePair<string, string>>>();
 
-		private ConsoleKeyInfo _improviseamayday([Optional]ConsoleKeyInfo _maydayexistingifany)
-		{
-			ConsoleKeyInfo _mayday = new ConsoleKeyInfo();
+	_menubase.Add("menu" , new List<KeyValuePair<string, string>>() {
+	new KeyValuePair<string, string>("c", "for Clearing Screen"),
+	new KeyValuePair<string, string>("f", "for Opening Function Menu **(sub-menu)")
+	});
+	_menubase.Add("function menu" , new List<KeyValuePair<string, string>>() {
+	new KeyValuePair<string, string>("a", "for Module Creation & Operations **(sub-menu)"),
+	new KeyValuePair<string, string>("b", "for Current DateTime Function."),
+	new KeyValuePair<string, string>("c", "for Misc Function 1."),
+	new KeyValuePair<string, string>("d", "for Misc Function 2.")
+	});
+	_menubase.Add("module menu" , new List<KeyValuePair<string, string>>() {
+	new KeyValuePair<string, string>("s", "for Creating a Sample Module & It's Instance Prefilled"),
+	new KeyValuePair<string, string>("c", "for Output Cultural Behavior for All Module Instances (properties)"),
+	new KeyValuePair<string, string>("o", "for Output All Module Instances (properties)"),
+	new KeyValuePair<string, string>("m", "for Creating Manual Module & It's Instance(s)"),
+	new KeyValuePair<string, string>("i", "for New Input for All Module Instances (properties)")
+	});
 
-			string _message = string.Empty;
+	foreach (KeyValuePair<string, List<KeyValuePair<string, string>>> _menugroup in _menubase)
+	{
+	_menugroup.Value.Add(new KeyValuePair<string, string>("separator", "------------------------------") {});
+	_menugroup.Value.Add(new KeyValuePair<string, string>("esc", "for get back to Previous Menu.") {});
+	_menugroup.Value.Add(new KeyValuePair<string, string>("a", "About") {});
+	}
 
-			// read keyboard input only when key any existance not passed
-			_mayday = _maydayexistingifany == default(ConsoleKeyInfo) ? Console.ReadKey(true) : _maydayexistingifany;
-		
-			_message = Environment.NewLine + Environment.NewLine + "\\\\\\ OPTION SELECTED \\\\\\ < " + _mayday.Key.ToString() + " >";
-			Console.Write(_message);
-			
-			return _mayday;
-		}
+	return _menubase;
+	}
 
-		#endregion
+	private void _showblockdivider([Optional]bool _istopone)
+	{
+	string _message = string.Empty;
+	_message += _istopone ? Environment.NewLine + Environment.NewLine : Environment.NewLine + Environment.NewLine;
+	_message += "==================================================";
+	_message += _istopone ? Environment.NewLine + Environment.NewLine : Environment.NewLine + Environment.NewLine;
+	Console.Write(_message);
+	}
+
+	private void _showwrongmayday()
+	{
+	string _message = string.Empty;
+	_message += " (!alert) Wrong Input!" + Environment.NewLine + Environment.NewLine;
+	Console.Write(_message);
+	}
+
+	private void _dummyfunctionformenuaction()
+	{
+	// a dummy function ,not to use it for any action
+	}
+
+	private ConsoleKeyInfo _improviseamayday([Optional]ConsoleKeyInfo _maydayexistingifany)
+	{
+	ConsoleKeyInfo _mayday = new ConsoleKeyInfo();
+
+	string _message = string.Empty;
+
+	// read keyboard input only when key any existance not passed
+	_mayday = _maydayexistingifany == default(ConsoleKeyInfo) ? Console.ReadKey(true) : _maydayexistingifany;
+
+	_message = Environment.NewLine + Environment.NewLine + "\\\\\\ OPTION SELECTED \\\\\\ < " + _mayday.Key.ToString() + " >";
+	Console.Write(_message);
+
+	return _mayday;
+	}
+
+	#endregion
 
 		#region TryConsole App Functionalities
 
@@ -455,12 +455,10 @@ namespace _tryconsole
 				Object _newinstanceobject = _instanceobject ?? new Object();
 
 				Guid _moduleguid = _newinstanceobject.GetType().GUID;
-				if (!_modulescontainer.ContainsKey(_moduleguid))
-				{
+				if (!_modulescontainer.ContainsKey(_moduleguid)) {
 					_modulescontainer.Add(_moduleguid, new List<Object>());
 				}
-				if (_modulescontainer.ContainsKey(_moduleguid))
-				{
+				if (_modulescontainer.ContainsKey(_moduleguid)) {
 					_modulescontainer[_moduleguid].Add(_newinstanceobject);
 				}
 			}
@@ -500,7 +498,7 @@ namespace _tryconsole
 						// output instance description
 						_message += "\t" + _instanceobject.GetType().Name + " [" + _modulecontainer.Key + "]"; // TODO: add instance GUID here
 						Console.Write(_message);
-				
+
 						// pass the instance object to action propagator
 						int _objectindentcount = 0;
 						this._instanceactions(_instanceobject, _instanceoperation, _objectindentcount, _modulecontainer.Key);
@@ -522,7 +520,7 @@ namespace _tryconsole
 				for (int _index = 0; _index < _objectindentcount; _index++) {
 					_objectindent += "\t";
 				}
-				
+
 				Type _instance = _instanceobject.GetType();
 
 				string _message = string.Empty;
@@ -575,9 +573,9 @@ namespace _tryconsole
 							this._setpropertyvalue(_property, _instanceobject, _propertyvalue);
 							break;
 					}
-					
+
 					Console.Write(_message);
-		
+
 					// call a recursive here if it's (property) not a system default type
 					if (_property != null && !_ispropertysystemdefaulttype)
 					{
@@ -608,7 +606,7 @@ namespace _tryconsole
 			{
 				// creating sample dynamic module
 				_builddynamicmodule _module_student = new _builddynamicmodule(_samplemoduleconfiguration);
-				
+
 				// creating an arbitrary instance of newly created module
 				Object? _instanceobject_student = _module_student._haveaninstance();
 
