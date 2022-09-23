@@ -10,7 +10,7 @@ using _os;
 
 namespace _tryconsole
 {
-    public class _gateway : _osscaffold
+	public class _gateway : _osscaffold
 	{
 		#region TryConsole App Gateway
 
