@@ -21,37 +21,49 @@ namespace _os
             get { return _m; }
         }
 
-		// constructor ,for implicit inheritence
+		// constructor ,for implicit operation
 		public _osscaffold()
 		{
             this._o = this;
-            if (this._o == null) {
-                throw new Exception("EXCEPTION: " + "Object not found");
+            if (this._o != null)
+            {
+                // assiging initial & non-nullable properties
+                this._i = new _osinfo(this._o);
+                this._m = new _osmenu();
 			}
-            this._i = new _osinfo(this._o);
-            this._m = new _osmenu();
+            else {
+                throw new Exception("EXCEPTION: " + "Object not found");
+            }
 		}
 
 		// constructor ,for explicit operation
-		public _osscaffold(Object _object)
+		public _osscaffold(Object _sentobject)
 		{
-            this._o = _object;
-            if (this._o == null) {
-                throw new Exception("EXCEPTION: " + "Object not found");
+            this._o = _sentobject;
+            if (this._o != null)
+            {
+                // assiging initial & non-nullable properties
+                this._i = new _osinfo(this._o);
+                this._m = new _osmenu();
 			}
-            this._i = new _osinfo(this._o);
-            this._m = new _osmenu();
-		}        
+            else {
+                throw new Exception("EXCEPTION: " + "Object not found");
+            }
+		}
 	}
 
     public class _osinfo
     {
         // private properties
+        private Assembly _a;
         private Type? _t;
         private string _n;
-        private Assembly _a;
 
         // public properties
+        public Assembly _assembly
+        {
+            get { return this._a; }
+        }
         public Type? _type
         {
             get { return this._t; }
@@ -77,19 +89,17 @@ namespace _os
                 return _message;
             }
         }
-        public Assembly _assembly
-        {
-            get { return this._a; }
-        }
 
-        // constructor
-        public _osinfo(Object _object)
+        // constructor ,for explicit operation
+        public _osinfo(Object _sentobject)
         {
             this._t = typeof(Object);
-            if (_object.GetType() != null) {
-                this._t = _object.GetType();
-                this._n = this._t?.Namespace ?? string.Empty;
+
+            if (_sentobject.GetType() != null) {
+                // assiging initial & non-nullable properties
                 this._a = this._t?.Assembly ?? new Object().GetType().Assembly ;
+                this._t = _sentobject.GetType();
+                this._n = this._t?.Namespace ?? string.Empty;
             }
             else {
                 throw new Exception("EXCEPTION: " + "Object not found");
@@ -99,6 +109,61 @@ namespace _os
 
     public class _osmenu
     {
+        // public properties
+        public _menuform _menubase;
 
+        // constructor ,for implicit operation
+        public _osmenu()
+        {
+            // assiging initial & non-nullable properties
+            this._menubase = new _osmenu._menuform();
+        }
+
+        // constructor ,for explicit operation
+        public _osmenu(_menuform _menubase)
+        {
+            // assiging initial & non-nullable properties
+            this._menubase = _menubase;
+        }
+
+        public class _menuform
+        {
+            // public properties
+            public List<_menu> _menus;
+
+            // constructor ,for implicit operation
+            public _menuform()
+            {
+                // assiging initial & non-nullable properties
+                this._menus = new List<_menu>() {};
+            }
+
+            // constructor ,for explicit operation
+            public _menuform(List<_menu> _menus)
+            {
+                // assiging initial & non-nullable properties
+                this._menus = _menus;
+            }
+        }
+
+        public class _menu
+        {
+            // public properties
+            public _menuform _nextmenuform;
+
+            // constructor ,for implicit operation
+            public _menu()
+            {
+                // assiging initial & non-nullable properties
+                this._nextmenuform = new _menuform();
+            }
+
+            // constructor ,for explicit operation
+            public _menu(_menuform _nextmenuform)
+            {
+                // assiging initial & non-nullable properties
+                this._nextmenuform = _nextmenuform;
+            }
+        }
     }
 }
