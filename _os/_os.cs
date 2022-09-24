@@ -168,7 +168,7 @@ namespace _os
 
 
 			// public properties
-			public enum _accessortype: byte { ui, service };
+			public enum _accessortype: byte { service, console, ui };
 			public _accessortype? _accessor
 			{
 				get {
