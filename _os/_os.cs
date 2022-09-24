@@ -4,21 +4,21 @@ using System.Reflection;
 
 namespace _os
 {
-	public class _osscaffold
+	public class _scaffold
 	{
 		// private properties
 		private Object _o;
-		private _osinfo _i;
-		private _osmenu _m;
+		private _info _i;
+		private _menu _m;
 
 		// public properties
-		public _osinfo _info
+		public _info _info
 		{
 			get {
 				return this._i;
 			}
 		}
-		public _osmenu _menu
+		public _menu _menu
 		{
 			get {
 				return this._m;
@@ -26,14 +26,14 @@ namespace _os
 		}
 
 		// constructor ,for implicit operation
-		public _osscaffold()
+		public _scaffold()
 		{
 			this._o = this;
 			if (this._o != null)
 			{
 				// assiging initial & non-nullable properties
-				this._i = new _osinfo(this._o);
-				this._m = new _osmenu();
+				this._i = new _info(this._o);
+				this._m = new _menu();
 			}
 			else {
 				throw new Exception("EXCEPTION: " + "Object not found");
@@ -41,14 +41,14 @@ namespace _os
 		}
 
 		// constructor ,for explicit operation
-		public _osscaffold(Object _sentobject)
+		public _scaffold(Object _sentobject)
 		{
 			this._o = _sentobject;
 			if (this._o != null)
 			{
 				// assiging initial & non-nullable properties
-				this._i = new _osinfo(this._o);
-				this._m = new _osmenu();
+				this._i = new _info(this._o);
+				this._m = new _menu();
 			}
 			else {
 				throw new Exception("EXCEPTION: " + "Object not found");
@@ -56,7 +56,7 @@ namespace _os
 		}
 	}
 
-	public class _osinfo
+	public class _info
 	{
 		// private properties
 		private Assembly _a;
@@ -101,7 +101,7 @@ namespace _os
 		}
 
 		// constructor ,for explicit operation
-		public _osinfo(Object _sentobject)
+		public _info(Object _sentobject)
 		{
 			this._t = typeof(Object);
 
@@ -118,53 +118,53 @@ namespace _os
 		}
 	}
 
-	public class _osmenu
+	public class _menu
 	{
 		// public properties
-		public _menuset _menus;
+		public _set _base;
 
 		// constructor ,for implicit operation
-		public _osmenu()
+		public _menu()
 		{
 			// assiging initial & non-nullable properties
-			this._menus = new _osmenu._menuset();
+			this._base = new _os._menu._set();
 		}
 
 		// constructor ,for explicit operation
-		public _osmenu(_menuset _menubase)
+		public _menu(_set _base)
 		{
 			// assiging initial & non-nullable properties
-			this._menus = _menubase;
+			this._base = _base;
 		}
 
-		public class _menuset
+		public class _set
 		{
 			// public properties
-			public List<_menu> _set;
+			public List<_value> _values;
 
 			// constructor ,for implicit operation
-			public _menuset()
+			public _set()
 			{
 				// assiging initial & non-nullable properties
-				this._set = new List<_menu>() {};
+				this._values = new List<_value>() {};
 			}
 
 			// constructor ,for explicit operation
-			public _menuset(List<_menu> _menus)
+			public _set(List<_value> _values)
 			{
 				// assiging initial & non-nullable properties
-				this._set = _menus;
+				this._values = _values;
 			}
 		}
 
-		public class _menu
+		public class _value
 		{
 			// private properties
 			private _accessortype? _a;
 			private string? _tk;
 			private string? _d;
 			private Action? _act;
-			private _menuset? _ns;
+			private _set? _ns;
 
 
 			// public properties
@@ -193,7 +193,7 @@ namespace _os
 					return this._act;
 				}
 			}
-			public _menuset? _nextset
+			public _set? _nextset
 			{
 				get {
 					return this._ns;
@@ -201,13 +201,13 @@ namespace _os
 			}
 
 			// constructor ,for implicit operation
-			public _menu()
+			public _value()
 			{
 				// assiging initial & non-nullable properties
 			}
 
 			// constructor ,for explicit operation
-			public _menu(_accessortype? _accessor, string? _triggeringkey, string? _description, Action? _action, _menuset? _nextset)
+			public _value(_accessortype? _accessor, string? _triggeringkey, string? _description, Action? _action, _set? _nextset)
 			{
 				// assiging initial & non-nullable properties
 				this._a = _accessor;

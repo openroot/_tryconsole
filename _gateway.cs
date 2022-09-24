@@ -9,7 +9,7 @@ using _os;
 
 namespace _tryconsole
 {
-	public class _gateway : _osscaffold
+	public class _gateway : _os._scaffold
 	{
 		#region TryConsole App Gateway
 
@@ -397,7 +397,7 @@ namespace _tryconsole
 			// TODO: prepare the app about
 			_message += Environment.NewLine + "APP NAME: " + this._info._beautyname;
 			// TODO: just an example of accessing menu of the app (is already built)
-			_osmenu._menu? _menu = this._menu._menus._set.FirstOrDefault();
+			_os._menu._value? _amenu = this._menu._base._values.FirstOrDefault();
 			this._showappthreaddata();
 
 			Console.Write(_message);
