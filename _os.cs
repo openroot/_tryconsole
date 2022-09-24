@@ -207,10 +207,14 @@ namespace _os
 			}
 
 			// constructor ,for explicit operation
-			public _menu(_menuset _nextset)
+			public _menu(_accessortype? _accessor, string? _triggeringkey, string? _description, Action? _action, _menuset? _nextset)
 			{
 				// assiging initial & non-nullable properties
-				//this._ns = _nextset;
+				this._a = _accessor;
+				this._tk = _triggeringkey;
+				this._d = _description;
+				this._act = _action;
+				this._ns = _nextset;
 			}
 		}
 	}
